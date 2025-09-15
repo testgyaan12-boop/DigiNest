@@ -3,7 +3,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Home, User, Briefcase, Users, FileText, LayoutGrid, MoreHorizontal, LogIn, UserPlus, LogOut, Package, Phone } from "lucide-react";
+import { Home, User, Briefcase, Users, FileText, LayoutGrid, MoreHorizontal, LogIn, UserPlus, LogOut, Package, Phone, Shield } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { useEffect, useState } from "react";
@@ -20,6 +20,7 @@ const moreNavLinks = [
     { href: "/about", label: "About", icon: Users },
     { href: "/team", label: "Team", icon: Users },
     { href: "/contact", label: "Contact", icon: Phone },
+    { href: "/admin", label: "Admin", icon: Shield },
 ]
 
 const NavLink = ({ href, label, icon: Icon }: { href: string; label: string; icon: React.ElementType }) => {
@@ -52,7 +53,7 @@ const MoreNavLink = ({ href, label, icon: Icon, onClick }: { href: string; label
 
     const className = cn(
         "flex flex-col items-center justify-center gap-1 rounded-lg p-4 text-base font-medium",
-        pathname === href
+        pathname.startsWith(href) && href !== "/" || pathname === href
         ? "text-primary bg-muted/50"
         : "text-muted-foreground hover:bg-muted/50"
     );
@@ -97,7 +98,7 @@ export default function MobileNav() {
                  <button
                     className={cn(
                         "flex flex-col items-center justify-center gap-1 text-xs font-medium",
-                        sheetLinks.some(l => l.href === pathname)
+                        sheetLinks.some(l => pathname.startsWith(l.href) && l.href !== '/')
                         ? "text-primary"
                         : "text-muted-foreground hover:text-foreground"
                     )}
