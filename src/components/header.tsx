@@ -30,9 +30,6 @@ export default function Header() {
         <div className="mr-4 flex md:hidden">
             <Link href="/" className="mr-6 flex items-center space-x-2">
                 <Code2 className="h-6 w-6" />
-                <span className="font-bold">
-                Novasuites
-                </span>
             </Link>
         </div>
         <div className="mr-4 hidden md:flex">
@@ -53,6 +50,9 @@ export default function Header() {
           </nav>
         </div>
         <div className="flex flex-1 items-center justify-end space-x-2">
+           <span className="font-bold md:hidden">
+              Novasuites
+            </span>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button variant="ghost" size="icon">
@@ -66,6 +66,7 @@ export default function Header() {
                     <DropdownMenuLabel>My Account</DropdownMenuLabel>
                     <DropdownMenuSeparator />
                     <DropdownMenuItem asChild><Link href="/profile">Profile</Link></DropdownMenuItem>
+                    <DropdownMenuItem asChild><Link href="/my-projects">My Projects</Link></DropdownMenuItem>
                     <DropdownMenuItem onClick={handleLogout}>Logout</DropdownMenuItem>
                   </>
                 ) : (
