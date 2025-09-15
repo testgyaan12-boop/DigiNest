@@ -42,14 +42,14 @@ const MoreNavLink = ({ href, label, icon: Icon }: { href: string; label: string;
         <Link
             href={href}
             className={cn(
-              "flex items-center gap-4 rounded-lg p-4 text-base font-medium",
+              "flex flex-col items-center justify-center gap-1 rounded-lg p-4 text-base font-medium",
               pathname === href
-                ? "bg-muted text-primary"
+                ? "text-primary"
                 : "text-muted-foreground hover:bg-muted/50"
             )}
           >
             <Icon className="h-6 w-6" />
-            <span className="truncate">{label}</span>
+            <span className="truncate text-xs">{label}</span>
         </Link>
     )
 }
@@ -77,11 +77,11 @@ export default function MobileNav() {
                     <span className="truncate">More</span>
                 </button>
             </SheetTrigger>
-            <SheetContent side="bottom" className="h-[40vh]">
+            <SheetContent side="bottom" className="h-auto">
                 <SheetHeader>
                     <SheetTitle>More</SheetTitle>
                 </SheetHeader>
-                <div className="mt-4 grid gap-2">
+                <div className="mt-4 grid grid-cols-4 gap-2">
                     {moreNavLinks.map(link => <MoreNavLink key={link.href} {...link} />)}
                 </div>
             </SheetContent>
