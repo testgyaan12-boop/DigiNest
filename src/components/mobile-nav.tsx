@@ -37,9 +37,8 @@ const NavLink = ({ href, label, icon: Icon }: { href: string; label: string; ico
     )
 }
 
-const MoreNavLink = ({ href, label, icon: Icon, onClick }: { href: string; label: string; icon: React.ElementType, onClick?: () => void }) => {
+const MoreNavLink = ({ href, label, icon: Icon }: { href: string; label: string; icon: React.ElementType }) => {
     const pathname = usePathname();
-    const isLink = !!href;
 
     const content = (
         <>
@@ -50,23 +49,15 @@ const MoreNavLink = ({ href, label, icon: Icon, onClick }: { href: string; label
 
     const className = cn(
         "flex flex-col items-center justify-center gap-1 rounded-lg p-4 text-base font-medium",
-        pathname === href && href !== "#"
+        pathname === href
         ? "text-primary bg-muted/50"
         : "text-muted-foreground hover:bg-muted/50"
     );
 
-    if (isLink) {
-        return (
-            <Link href={href} className={className} onClick={onClick}>
-                {content}
-            </Link>
-        )
-    }
-
     return (
-        <button className={className} onClick={onClick}>
+        <Link href={href} className={className}>
             {content}
-        </button>
+        </Link>
     )
 }
 
@@ -88,23 +79,23 @@ export default function MobileNav() {
     window.location.href = '/'; // Redirect to home
   };
 
+  const accountHref = isLoggedIn ? "/profile" : "/login";
+  const accountLabel = isLoggedIn ? "Profile" : "Account";
+  const accountIcon = isLoggedIn ? User : LogIn;
+  
+  const allMainLinks = [...mainNavLinks, { href: accountHref, label: accountLabel, icon: accountIcon }];
 
-  const accountLinks = isLoggedIn ?
-    [
-        { href: "#", label: "Profile", icon: User },
-        { href: "#", label: "Logout", icon: LogOut, action: handleLogout }
-    ]
-    : [
-        { href: "/login", label: "Login", icon: LogIn },
-        { href: "/signup", label: "Sign Up", icon: UserPlus }
-    ];
-
-  const allMoreLinks = [...moreNavLinks, ...accountLinks];
+  const sheetLinks = moreNavLinks;
+  
+  // Conditionally add logout to the sheet if logged in
+  if (isLoggedIn) {
+      sheetLinks.push({ href: "#", label: "Logout", icon: LogOut });
+  }
 
   return (
     <nav className="fixed bottom-0 left-0 right-0 z-50 border-t bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 md:hidden">
       <div className="grid h-16 grid-cols-5 items-center justify-around">
-        {mainNavLinks.map((link) => (
+        {allMainLinks.map((link) => (
           <NavLink key={link.href} {...link} />
         ))}
         <Sheet>
@@ -112,7 +103,7 @@ export default function MobileNav() {
                  <button
                     className={cn(
                         "flex flex-col items-center justify-center gap-1 text-xs font-medium",
-                        allMoreLinks.some(l => l.href === pathname)
+                        sheetLinks.some(l => l.href === pathname)
                         ? "text-primary"
                         : "text-muted-foreground hover:text-foreground"
                     )}
@@ -126,7 +117,17 @@ export default function MobileNav() {
                     <SheetTitle>More</SheetTitle>
                 </SheetHeader>
                 <div className="mt-4 grid grid-cols-4 gap-2">
-                    {allMoreLinks.map(link => <MoreNavLink key={link.label} href={link.href} label={link.label} icon={link.icon} onClick={link.action} />)}
+                    {sheetLinks.map(link => {
+                        if (link.label === "Logout") {
+                             return (
+                                <button key={link.label} onClick={handleLogout} className="flex flex-col items-center justify-center gap-1 rounded-lg p-4 text-base font-medium text-muted-foreground hover:bg-muted/50">
+                                    <LogOut className="h-6 w-6" />
+                                    <span className="truncate text-xs">Logout</span>
+                                </button>
+                            )
+                        }
+                       return <MoreNavLink key={link.label} href={link.href} label={link.label} icon={link.icon} />
+                    })}
                 </div>
             </SheetContent>
         </Sheet>

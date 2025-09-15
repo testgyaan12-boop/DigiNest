@@ -56,7 +56,7 @@ export default function Header() {
                   <>
                     <DropdownMenuLabel>My Account</DropdownMenuLabel>
                     <DropdownMenuSeparator />
-                    <DropdownMenuItem asChild><Link href="#">Profile</Link></DropdownMenuItem>
+                    <DropdownMenuItem asChild><Link href="/profile">Profile</Link></DropdownMenuItem>
                     <DropdownMenuItem onClick={handleLogout}>Logout</DropdownMenuItem>
                   </>
                 ) : (
