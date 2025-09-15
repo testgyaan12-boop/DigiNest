@@ -1,11 +1,28 @@
+'use client';
+
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { ModeToggle } from './mode-toggle';
 import { Code2, UserCircle } from 'lucide-react';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
+import { useEffect, useState } from 'react';
 
 export default function Header() {
-  const isLoggedIn = false; // This would be dynamic in a real app
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  useEffect(() => {
+    // Since localStorage is a browser API, we need to check for it in useEffect.
+    if (typeof window !== 'undefined') {
+      const user = localStorage.getItem('user');
+      setIsLoggedIn(!!user);
+    }
+  }, []);
+
+  const handleLogout = () => {
+    localStorage.removeItem('user');
+    setIsLoggedIn(false);
+    window.location.href = '/'; // Redirect to home
+  };
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -39,8 +56,8 @@ export default function Header() {
                   <>
                     <DropdownMenuLabel>My Account</DropdownMenuLabel>
                     <DropdownMenuSeparator />
-                    <DropdownMenuItem asChild><Link href="/profile">Profile</Link></DropdownMenuItem>
-                    <DropdownMenuItem>Logout</DropdownMenuItem>
+                    <DropdownMenuItem asChild><Link href="#">Profile</Link></DropdownMenuItem>
+                    <DropdownMenuItem onClick={handleLogout}>Logout</DropdownMenuItem>
                   </>
                 ) : (
                   <>

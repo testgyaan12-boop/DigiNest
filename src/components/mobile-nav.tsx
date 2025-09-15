@@ -2,10 +2,10 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Home, User, Briefcase, Users, FileText, LayoutGrid, MoreHorizontal, LogIn, UserPlus } from "lucide-react";
+import { Home, User, Briefcase, Users, FileText, LayoutGrid, MoreHorizontal, LogIn, UserPlus, LogOut } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
-import { Button } from "@/components/ui/button";
+import { useEffect, useState } from "react";
 
 const mainNavLinks = [
   { href: "/", label: "Home", icon: Home },
@@ -15,7 +15,7 @@ const mainNavLinks = [
 ];
 
 const moreNavLinks = [
-    { href: "/about", label: "About", icon: User },
+    { href: "/about", label: "About", icon: Users },
     { href: "/team", label: "Team", icon: Users },
 ]
 
@@ -37,30 +37,63 @@ const NavLink = ({ href, label, icon: Icon }: { href: string; label: string; ico
     )
 }
 
-const MoreNavLink = ({ href, label, icon: Icon }: { href: string; label: string; icon: React.ElementType }) => {
+const MoreNavLink = ({ href, label, icon: Icon, onClick }: { href: string; label: string; icon: React.ElementType, onClick?: () => void }) => {
     const pathname = usePathname();
-    return (
-        <Link
-            href={href}
-            className={cn(
-              "flex flex-col items-center justify-center gap-1 rounded-lg p-4 text-base font-medium",
-              pathname === href
-                ? "text-primary bg-muted/50"
-                : "text-muted-foreground hover:bg-muted/50"
-            )}
-          >
+    const isLink = !!href;
+
+    const content = (
+        <>
             <Icon className="h-6 w-6" />
             <span className="truncate text-xs">{label}</span>
-        </Link>
+        </>
+    );
+
+    const className = cn(
+        "flex flex-col items-center justify-center gap-1 rounded-lg p-4 text-base font-medium",
+        pathname === href && href !== "#"
+        ? "text-primary bg-muted/50"
+        : "text-muted-foreground hover:bg-muted/50"
+    );
+
+    if (isLink) {
+        return (
+            <Link href={href} className={className} onClick={onClick}>
+                {content}
+            </Link>
+        )
+    }
+
+    return (
+        <button className={className} onClick={onClick}>
+            {content}
+        </button>
     )
 }
 
 export default function MobileNav() {
   const pathname = usePathname();
-  const isLoggedIn = false; // This would be dynamic in a real app
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  useEffect(() => {
+    // Since localStorage is a browser API, we need to check for it in useEffect.
+    if (typeof window !== 'undefined') {
+      const user = localStorage.getItem('user');
+      setIsLoggedIn(!!user);
+    }
+  }, []);
+
+  const handleLogout = () => {
+    localStorage.removeItem('user');
+    setIsLoggedIn(false);
+    window.location.href = '/'; // Redirect to home
+  };
+
 
   const accountLinks = isLoggedIn ?
-    [{ href: "/profile", label: "Profile", icon: User }]
+    [
+        { href: "#", label: "Profile", icon: User },
+        { href: "#", label: "Logout", icon: LogOut, action: handleLogout }
+    ]
     : [
         { href: "/login", label: "Login", icon: LogIn },
         { href: "/signup", label: "Sign Up", icon: UserPlus }
@@ -93,7 +126,7 @@ export default function MobileNav() {
                     <SheetTitle>More</SheetTitle>
                 </SheetHeader>
                 <div className="mt-4 grid grid-cols-4 gap-2">
-                    {allMoreLinks.map(link => <MoreNavLink key={link.href} {...link} />)}
+                    {allMoreLinks.map(link => <MoreNavLink key={link.label} href={link.href} label={link.label} icon={link.icon} onClick={link.action} />)}
                 </div>
             </SheetContent>
         </Sheet>
