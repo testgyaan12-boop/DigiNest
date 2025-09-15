@@ -9,8 +9,8 @@ import MobileNav from '@/components/mobile-nav';
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-  title: 'Software Developer Portfolio',
-  description: 'Showcasing awesome software development services',
+  title: 'DevPlatform | The Ultimate Development Platform',
+  description: 'The ultimate platform for modern application development.',
 };
 
 export default function RootLayout({

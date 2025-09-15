@@ -11,7 +11,7 @@ export default function Header() {
           <Link href="/" className="mr-6 flex items-center space-x-2">
             <Code2 className="h-6 w-6" />
             <span className="hidden font-bold sm:inline-block">
-              DevPortfolio
+              DevPlatform
             </span>
           </Link>
           <nav className="flex items-center space-x-6 text-sm font-medium">
@@ -25,6 +25,7 @@ export default function Header() {
         </div>
         <div className="flex flex-1 items-center justify-between space-x-2 md:justify-end">
           <Button variant="ghost">Login</Button>
+          <Button>Sign Up</Button>
           <ModeToggle />
         </div>
       </div>
