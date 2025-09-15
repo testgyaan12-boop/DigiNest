@@ -1,8 +1,10 @@
+
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { AppWindow, Code, BrainCircuit, Brush } from 'lucide-react';
 import Image from 'next/image';
+import Link from 'next/link';
 
 export default function Home() {
   return (
@@ -21,10 +23,10 @@ export default function Home() {
               </div>
               <div className="flex flex-col gap-2 min-[400px]:flex-row">
                 <Button asChild size="lg">
-                  <a href="/about">Learn More</a>
+                  <Link href="/about">Learn More</Link>
                 </Button>
                 <Button asChild variant="secondary" size="lg">
-                  <a href="/contact">Contact Me</a>
+                  <Link href="/blog">My Blog</Link>
                 </Button>
               </div>
             </div>
@@ -49,21 +51,21 @@ export default function Home() {
                 From backend logic to frontend magic, I've got you covered.
             </p>
             <Tabs defaultValue="web-dev" className="mt-12">
-                <TabsList className="grid w-full grid-cols-2 md:grid-cols-4 md:w-auto mx-auto">
-                    <TabsTrigger value="web-dev">
-                        <AppWindow className="mr-2" />
+                <TabsList className="grid w-full grid-cols-2 md:grid-cols-4 md:w-auto mx-auto h-auto">
+                    <TabsTrigger value="web-dev" className="flex-col sm:flex-row">
+                        <AppWindow className="mr-0 mb-2 sm:mr-2 sm:mb-0" />
                         Web Apps
                     </TabsTrigger>
-                    <TabsTrigger value="api-dev">
-                        <Code className="mr-2" />
+                    <TabsTrigger value="api-dev" className="flex-col sm:flex-row">
+                        <Code className="mr-0 mb-2 sm:mr-2 sm:mb-0" />
                         APIs
                     </TabsTrigger>
-                    <TabsTrigger value="ui-ux">
-                        <Brush className="mr-2" />
+                    <TabsTrigger value="ui-ux" className="flex-col sm:flex-row">
+                        <Brush className="mr-0 mb-2 sm:mr-2 sm:mb-0" />
                         UI/UX
                     </TabsTrigger>
-                    <TabsTrigger value="ai-integration">
-                        <BrainCircuit className="mr-2" />
+                    <TabsTrigger value="ai-integration" className="flex-col sm:flex-row">
+                        <BrainCircuit className="mr-0 mb-2 sm:mr-2 sm:mb-0" />
                         AI
                     </TabsTrigger>
                 </TabsList>
