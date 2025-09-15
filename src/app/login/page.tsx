@@ -1,3 +1,4 @@
+
 'use client';
 
 import { Button } from "@/components/ui/button";
@@ -10,11 +11,21 @@ import { useState } from "react";
 
 export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
 
   const handleLogin = () => {
     // In a real app, you'd perform authentication here
-    localStorage.setItem('user', JSON.stringify({ name: 'Test User', email: 'm@example.com' }));
-    window.location.href = '/'; // Redirect to homepage to reflect login state
+    // For demo purposes, we allow a specific admin user
+    if (email === 'admin@example.com') {
+      const user = { name: 'Admin User', email };
+      localStorage.setItem('user', JSON.stringify(user));
+      window.location.href = '/admin';
+    } else {
+      const user = { name: 'Test User', email };
+      localStorage.setItem('user', JSON.stringify(user));
+      window.location.href = '/'; // Redirect to homepage to reflect login state
+    }
   };
 
   return (
@@ -23,17 +34,17 @@ export default function LoginPage() {
         <CardHeader>
           <CardTitle className="text-2xl">Login</CardTitle>
           <CardDescription>
-            Enter your email below to login to your account.
+            Enter your email below to login. Use <b>admin@example.com</b> for admin access.
           </CardDescription>
         </CardHeader>
         <CardContent className="grid gap-4">
           <div className="grid gap-2">
             <Label htmlFor="email">Email</Label>
-            <Input id="email" type="email" placeholder="m@example.com" required />
+            <Input id="email" type="email" placeholder="m@example.com" value={email} onChange={(e) => setEmail(e.target.value)} required />
           </div>
           <div className="grid gap-2 relative">
             <Label htmlFor="password">Password</Label>
-            <Input id="password" type={showPassword ? "text" : "password"} required />
+            <Input id="password" type={showPassword ? "text" : "password"} value={password} onChange={(e) => setPassword(e.target.value)} required />
             <Button
                 type="button"
                 variant="ghost"
