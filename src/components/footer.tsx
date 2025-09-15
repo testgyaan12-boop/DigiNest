@@ -11,10 +11,13 @@ export default function Footer() {
                         Built by a developer, for developers. © {new Date().getFullYear()}
                     </p>
                 </div>
-                <div className="flex items-center gap-4">
-                    <Link href="/#">Privacy</Link>
-                    <Link href="/#">Terms</Link>
-                </div>
+                <nav className="flex items-center gap-4 md:hidden">
+                    <Link href="/">Home</Link>
+                    <Link href="/about">About</Link>
+                    <Link href="/services">Services</Link>
+                    <Link href="/team">Team</Link>
+                    <Link href="/blog">Blog</Link>
+                </nav>
             </div>
         </footer>
     )
