@@ -9,7 +9,7 @@ import MobileNav from '@/components/mobile-nav';
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-  title: 'DevPlatform | The Ultimate Development Platform',
+  title: 'Novasuites | The Ultimate Development Platform',
   description: 'The ultimate platform for modern application development.',
 };
 

@@ -8,7 +8,7 @@ export default function Footer() {
                 <div className="flex items-center gap-2">
                     <Code2 />
                     <p className="text-sm text-muted-foreground">
-                        © {new Date().getFullYear()} DevPlatform Inc.
+                        © {new Date().getFullYear()} Novasuites Inc.
                     </p>
                 </div>
                 <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-sm text-muted-foreground">
