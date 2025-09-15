@@ -84,7 +84,7 @@ export default function ContactUsPage() {
 
     return (
         <div className="container py-12 md:py-24">
-            <div className="grid gap-12 lg:grid-cols-2 lg:gap-16">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16">
                 <Card>
                     <CardHeader>
                         <CardTitle className="text-3xl">Contact Us</CardTitle>
@@ -145,38 +145,40 @@ export default function ContactUsPage() {
                       <Card>
                         <CardContent className="p-0">
                             <ScrollArea>
-                                <Table>
-                                    <TableHeader>
-                                        <TableRow>
-                                            <TableHead className="min-w-[250px]">Project</TableHead>
-                                            <TableHead>Submitted</TableHead>
-                                            <TableHead>Budget</TableHead>
-                                            <TableHead className="text-right">Status</TableHead>
-                                        </TableRow>
-                                    </TableHeader>
-                                    <TableBody>
-                                        {requests.length > 0 ? (
-                                            requests.map((req, index) => (
-                                                <TableRow key={index}>
-                                                    <TableCell className="font-medium max-w-xs truncate">{req.description}</TableCell>
-                                                    <TableCell>{req.submittedAt}</TableCell>
-                                                    <TableCell>${req.budget}</TableCell>
-                                                    <TableCell className="text-right">
-                                                        <Badge variant={req.status === 'Pending' ? 'secondary' : 'default'}>
-                                                            {req.status}
-                                                        </Badge>
+                                <div className="overflow-x-auto">
+                                    <Table className="min-w-full">
+                                        <TableHeader>
+                                            <TableRow>
+                                                <TableHead className="min-w-[250px]">Project</TableHead>
+                                                <TableHead>Submitted</TableHead>
+                                                <TableHead>Budget</TableHead>
+                                                <TableHead className="text-right">Status</TableHead>
+                                            </TableRow>
+                                        </TableHeader>
+                                        <TableBody>
+                                            {requests.length > 0 ? (
+                                                requests.map((req, index) => (
+                                                    <TableRow key={index}>
+                                                        <TableCell className="font-medium max-w-xs truncate">{req.description}</TableCell>
+                                                        <TableCell>{req.submittedAt}</TableCell>
+                                                        <TableCell>${req.budget}</TableCell>
+                                                        <TableCell className="text-right">
+                                                            <Badge variant={req.status === 'Pending' ? 'secondary' : 'default'}>
+                                                                {req.status}
+                                                            </Badge>
+                                                        </TableCell>
+                                                    </TableRow>
+                                                ))
+                                            ) : (
+                                                <TableRow>
+                                                    <TableCell colSpan={4} className="text-center h-24">
+                                                        You haven't submitted any projects yet.
                                                     </TableCell>
                                                 </TableRow>
-                                            ))
-                                        ) : (
-                                            <TableRow>
-                                                <TableCell colSpan={4} className="text-center h-24">
-                                                    You haven't submitted any projects yet.
-                                                </TableCell>
-                                            </TableRow>
-                                        )}
-                                    </TableBody>
-                                </Table>
+                                            )}
+                                        </TableBody>
+                                    </Table>
+                                </div>
                                 <ScrollBar orientation="horizontal" />
                             </ScrollArea>
                         </CardContent>
