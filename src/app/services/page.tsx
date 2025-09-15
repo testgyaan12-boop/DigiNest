@@ -45,6 +45,26 @@ const developmentServices = services.filter(s => s.category === 'development');
 const designServices = services.filter(s => s.category === 'design');
 const operationsServices = services.filter(s => s.category === 'operations');
 
+const ServiceCategory = ({ title, services }: { title: string, services: typeof developmentServices }) => (
+    <div>
+        <h2 className="text-3xl font-bold tracking-tighter text-center sm:text-4xl mb-8">{title}</h2>
+        <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+            {services.map((service) => (
+            <Card key={service.title}>
+                <CardHeader className="flex flex-row items-center gap-4">
+                <div className="bg-primary text-primary-foreground p-3 rounded-md">
+                    {service.icon}
+                </div>
+                <CardTitle>{service.title}</CardTitle>
+                </CardHeader>
+                <CardContent>
+                <p className="text-muted-foreground">{service.description}</p>
+                </CardContent>
+            </Card>
+            ))}
+        </div>
+    </div>
+);
 
 export default function ServicesPage() {
   return (
@@ -54,7 +74,15 @@ export default function ServicesPage() {
         Here's what I can do for you. I offer a range of services to help you achieve your goals.
       </p>
 
-      <Tabs defaultValue="development" className="mt-12">
+      {/* Mobile View - Stacked Sections */}
+      <div className="mt-12 space-y-16 md:hidden">
+          <ServiceCategory title="Development" services={developmentServices} />
+          <ServiceCategory title="Design" services={designServices} />
+          <ServiceCategory title="Operations" services={operationsServices} />
+      </div>
+
+      {/* Desktop View - Tabs */}
+      <Tabs defaultValue="development" className="mt-12 hidden md:block">
         <TabsList className="grid w-full grid-cols-1 md:grid-cols-3 md:w-auto mx-auto">
           <TabsTrigger value="development">Development</TabsTrigger>
           <TabsTrigger value="design">Design</TabsTrigger>
