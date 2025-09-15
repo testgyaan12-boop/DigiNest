@@ -1,11 +1,15 @@
+'use client';
+
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import Link from "next/link";
-import { ExternalLink } from "lucide-react";
+import { ExternalLink, Share2, Copy } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
+import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
+import { useState } from "react";
 
 const saasPlatforms = {
   restaurant: [
@@ -64,31 +68,78 @@ const saasPlatforms = {
   ],
 };
 
+const ShareButton = ({ projectTitle }: { projectTitle: string }) => {
+    const [copied, setCopied] = useState(false);
+
+    const handleShare = async () => {
+        const shareData = {
+            title: projectTitle,
+            text: `Check out this amazing SaaS platform: ${projectTitle}`,
+            url: window.location.href,
+        };
+
+        try {
+            if (navigator.share) {
+                await navigator.share(shareData);
+            } else {
+                // Fallback for browsers that don't support the Web Share API
+                await navigator.clipboard.writeText(shareData.url);
+                setCopied(true);
+                setTimeout(() => setCopied(false), 2000); // Reset after 2 seconds
+            }
+        } catch (error) {
+            console.error('Error sharing:', error);
+            // Fallback to clipboard if sharing fails
+            await navigator.clipboard.writeText(shareData.url);
+            setCopied(true);
+            setTimeout(() => setCopied(false), 2000);
+        }
+    };
+
+    return (
+        <Button variant="outline" className="w-full" onClick={handleShare}>
+            {copied ? (
+                <>
+                    <Copy />
+                    Copied!
+                </>
+            ) : (
+                <>
+                    <Share2 />
+                    Share
+                </>
+            )}
+        </Button>
+    );
+};
+
 const ProjectCard = ({ project }: { project: typeof saasPlatforms.restaurant[0] }) => (
-  <Card className="flex flex-col overflow-hidden">
+  <Card className="flex flex-col overflow-hidden group">
     <CardHeader className="p-0 relative">
       <Carousel className="w-full">
         <CarouselContent>
           {project.images.map((img, index) => (
             <CarouselItem key={index}>
-              <Image
-                src={img}
-                width={600}
-                height={400}
-                alt={`${project.title} screenshot ${index + 1}`}
-                data-ai-hint={project.aiHints[index]}
-                className="object-cover w-full aspect-video"
-              />
+              <div className="overflow-hidden">
+                <Image
+                    src={img}
+                    width={600}
+                    height={400}
+                    alt={`${project.title} screenshot ${index + 1}`}
+                    data-ai-hint={project.aiHints[index]}
+                    className="object-cover w-full aspect-video transition-transform duration-300 group-hover:scale-105"
+                />
+              </div>
             </CarouselItem>
           ))}
         </CarouselContent>
-        <CarouselPrevious />
-        <CarouselNext />
+        <CarouselPrevious className="left-4" />
+        <CarouselNext className="right-4" />
       </Carousel>
     </CardHeader>
     <div className="flex flex-col flex-grow p-6">
       <CardTitle className="mb-2">{project.title}</CardTitle>
-      <p className="text-muted-foreground mb-4">{project.description}</p>
+      <p className="text-muted-foreground mb-4 flex-grow">{project.description}</p>
 
       <div className="mt-auto">
         <h4 className="font-semibold text-sm mb-2">Technologies Used:</h4>
@@ -99,13 +150,14 @@ const ProjectCard = ({ project }: { project: typeof saasPlatforms.restaurant[0] 
         </div>
       </div>
     </div>
-    <CardFooter>
-      <Button asChild className="w-full">
-        <Link href={project.liveDemoUrl} target="_blank">
-          <ExternalLink />
-          Live Demo
-        </Link>
-      </Button>
+    <CardFooter className="grid grid-cols-2 gap-4">
+        <Button asChild className="w-full">
+            <Link href={project.liveDemoUrl} target="_blank">
+                <ExternalLink />
+                Live Demo
+            </Link>
+        </Button>
+        <ShareButton projectTitle={project.title} />
     </CardFooter>
   </Card>
 );
@@ -113,18 +165,25 @@ const ProjectCard = ({ project }: { project: typeof saasPlatforms.restaurant[0] 
 export default function SaasPlatformsPage() {
   return (
     <div className="container py-12 md:py-24">
-      <h1 className="text-4xl font-bold tracking-tighter text-center sm:text-5xl">Our SaaS Platforms</h1>
-      <p className="max-w-2xl mx-auto mt-4 text-center text-muted-foreground md:text-xl">
-        Industry-specific solutions, tailor-made for your business needs.
-      </p>
+      <div className="text-center mb-12">
+        <h1 className="text-4xl font-bold tracking-tighter sm:text-5xl">Our SaaS Platforms</h1>
+        <p className="max-w-2xl mx-auto mt-4 text-muted-foreground md:text-xl">
+          Industry-specific solutions, tailor-made for your business needs.
+        </p>
+      </div>
 
-      <Tabs defaultValue="restaurant" className="mt-12">
-        <TabsList className="grid w-full grid-cols-2 h-auto p-0 md:grid-cols-4">
-          <TabsTrigger value="restaurant">Restaurant</TabsTrigger>
-          <TabsTrigger value="education">Education</TabsTrigger>
-          <TabsTrigger value="retail">Retail</TabsTrigger>
-          <TabsTrigger value="community">Community</TabsTrigger>
-        </TabsList>
+      <Tabs defaultValue="restaurant" className="w-full">
+        <div className="flex justify-center">
+            <ScrollArea className="w-full max-w-4xl pb-4 whitespace-nowrap">
+                <TabsList className="inline-flex h-auto p-1">
+                    <TabsTrigger value="restaurant">Restaurant</TabsTrigger>
+                    <TabsTrigger value="education">Education</TabsTrigger>
+                    <TabsTrigger value="retail">Retail</TabsTrigger>
+                    <TabsTrigger value="community">Community</TabsTrigger>
+                </TabsList>
+                <ScrollBar orientation="horizontal" />
+            </ScrollArea>
+        </div>
 
         <TabsContent value="restaurant">
           <div className="grid gap-8 mt-8 md:grid-cols-2">
