@@ -4,6 +4,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
+import { Label } from "@/components/ui/label";
 import { useEffect, useState } from "react";
 
 interface User {
@@ -101,8 +102,3 @@ export default function MyProjectsPage() {
         </div>
     );
 }
-
-// Add a label component here since it's used in this page and might not be globally available.
-const Label = (props: React.LabelHTMLAttributes<HTMLLabelElement>) => (
-    <label {...props} className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70" />
-);

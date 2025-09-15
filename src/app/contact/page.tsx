@@ -84,7 +84,7 @@ export default function ContactUsPage() {
 
     return (
         <div className="container py-12 md:py-24">
-            <div className="grid gap-12 md:grid-cols-2 md:gap-16">
+            <div className="grid gap-12 lg:grid-cols-2 lg:gap-16">
                 <Card>
                     <CardHeader>
                         <CardTitle className="text-3xl">Contact Us</CardTitle>
@@ -94,7 +94,7 @@ export default function ContactUsPage() {
                     </CardHeader>
                     <CardContent>
                         <form onSubmit={handleSubmit} className="grid gap-6">
-                            <div className="grid md:grid-cols-2 gap-6">
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <div className="grid gap-2">
                                     <Label htmlFor="name">Name</Label>
                                     <Input id="name" placeholder="Your Name" value={name} onChange={(e) => setName(e.target.value)} required />
