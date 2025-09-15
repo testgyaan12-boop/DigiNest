@@ -4,19 +4,19 @@ import { Code2 } from "lucide-react";
 export default function Footer() {
     return (
         <footer className="border-t">
-            <div className="container flex flex-col items-center justify-between gap-4 py-10 md:h-24 md:flex-row md:py-0">
-                <div className="flex flex-col items-center gap-4 px-8 md:flex-row md:gap-2 md:px-0">
+            <div className="container flex flex-col items-center justify-between gap-6 py-8 md:flex-row">
+                <div className="flex items-center gap-2">
                     <Code2 />
-                    <p className="text-center text-sm leading-loose md:text-left">
-                        Built by a developer, for developers. © {new Date().getFullYear()}
+                    <p className="text-sm text-muted-foreground">
+                        © {new Date().getFullYear()} DevPortfolio
                     </p>
                 </div>
-                <nav className="flex items-center gap-4 md:hidden">
-                    <Link href="/">Home</Link>
-                    <Link href="/about">About</Link>
-                    <Link href="/services">Services</Link>
-                    <Link href="/team">Team</Link>
-                    <Link href="/blog">Blog</Link>
+                <nav className="flex items-center gap-4 text-sm md:hidden">
+                    <Link href="/" className="text-muted-foreground hover:text-foreground">Home</Link>
+                    <Link href="/about" className="text-muted-foreground hover:text-foreground">About</Link>
+                    <Link href="/services" className="text-muted-foreground hover:text-foreground">Services</Link>
+                    <Link href="/team" className="text-muted-foreground hover:text-foreground">Team</Link>
+                    <Link href="/blog" className="text-muted-foreground hover:text-foreground">Blog</Link>
                 </nav>
             </div>
         </footer>
