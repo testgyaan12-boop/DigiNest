@@ -130,11 +130,11 @@ export default function ContactUsPage() {
                                 </div>
                             </div>
 
-                            <div className="grid gap-2">
+                            <div className="grid gap-2 md:col-span-2">
                                 <Label htmlFor="description">Project Description</Label>
                                 <Textarea id="description" placeholder="Tell us about your project..." value={description} onChange={(e) => setDescription(e.target.value)} required />
                             </div>
-                            <Button type="submit" className="w-full">Submit Request</Button>
+                            <Button type="submit" className="w-full md:col-span-2">Submit Request</Button>
                         </form>
                     </CardContent>
                 </Card>
