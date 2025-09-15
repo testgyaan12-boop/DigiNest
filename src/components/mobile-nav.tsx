@@ -1,8 +1,9 @@
+
 "use client";
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Home, User, Briefcase, Users, FileText, LayoutGrid, MoreHorizontal, LogIn, UserPlus, LogOut, Package } from "lucide-react";
+import { Home, User, Briefcase, Users, FileText, LayoutGrid, MoreHorizontal, LogIn, UserPlus, LogOut, Package, Phone } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { useEffect, useState } from "react";
@@ -18,6 +19,7 @@ const moreNavLinks = [
     { href: "/saas-platforms", label: "SaaS", icon: Package },
     { href: "/about", label: "About", icon: Users },
     { href: "/team", label: "Team", icon: Users },
+    { href: "/contact", label: "Contact", icon: Phone },
 ]
 
 const NavLink = ({ href, label, icon: Icon }: { href: string; label: string; icon: React.ElementType }) => {

@@ -1,3 +1,4 @@
+
 'use client';
 
 import Link from 'next/link';
@@ -47,6 +48,7 @@ export default function Header() {
             <Link href="/saas-platforms">SaaS Platforms</Link>
             <Link href="/team">Team</Link>
             <Link href="/blog">Blog</Link>
+            <Link href="/contact">Contact</Link>
           </nav>
         </div>
         <div className="flex flex-1 items-center justify-end space-x-2">
