@@ -66,7 +66,6 @@ export default function MobileNav() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   useEffect(() => {
-    // Since localStorage is a browser API, we need to check for it in useEffect.
     if (typeof window !== 'undefined') {
       const user = localStorage.getItem('user');
       setIsLoggedIn(!!user);
@@ -76,22 +75,12 @@ export default function MobileNav() {
   const handleLogout = () => {
     localStorage.removeItem('user');
     setIsLoggedIn(false);
-    window.location.href = '/'; // Redirect to home
+    window.location.href = '/'; 
   };
-
-  const accountHref = isLoggedIn ? "/profile" : "/login";
-  const accountLabel = isLoggedIn ? "Profile" : "Account";
-  const accountIcon = isLoggedIn ? User : LogIn;
   
-  const allMainLinks = [...mainNavLinks, { href: accountHref, label: accountLabel, icon: accountIcon }];
-
-  const sheetLinks = moreNavLinks;
+  const allMainLinks = [...mainNavLinks];
+  const sheetLinks = [...moreNavLinks];
   
-  // Conditionally add logout to the sheet if logged in
-  if (isLoggedIn) {
-      sheetLinks.push({ href: "#", label: "Logout", icon: LogOut });
-  }
-
   return (
     <nav className="fixed bottom-0 left-0 right-0 z-50 border-t bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 md:hidden">
       <div className="grid h-16 grid-cols-5 items-center justify-around">
@@ -118,14 +107,6 @@ export default function MobileNav() {
                 </SheetHeader>
                 <div className="mt-4 grid grid-cols-4 gap-2">
                     {sheetLinks.map(link => {
-                        if (link.label === "Logout") {
-                             return (
-                                <button key={link.label} onClick={handleLogout} className="flex flex-col items-center justify-center gap-1 rounded-lg p-4 text-base font-medium text-muted-foreground hover:bg-muted/50">
-                                    <LogOut className="h-6 w-6" />
-                                    <span className="truncate text-xs">Logout</span>
-                                </button>
-                            )
-                        }
                        return <MoreNavLink key={link.label} href={link.href} label={link.label} icon={link.icon} />
                     })}
                 </div>
