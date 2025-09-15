@@ -84,7 +84,7 @@ export default function ContactUsPage() {
 
     return (
         <div className="container py-12 md:py-24">
-            <div className="grid gap-12 lg:grid-cols-2 lg:gap-16">
+            <div className="grid gap-12 md:grid-cols-2 md:gap-16">
                 <Card>
                     <CardHeader>
                         <CardTitle className="text-3xl">Contact Us</CardTitle>
@@ -186,4 +186,3 @@ export default function ContactUsPage() {
         </div>
     );
 }
-
