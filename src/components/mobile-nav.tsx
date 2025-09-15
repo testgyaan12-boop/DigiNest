@@ -38,7 +38,7 @@ const NavLink = ({ href, label, icon: Icon }: { href: string; label: string; ico
     )
 }
 
-const MoreNavLink = ({ href, label, icon: Icon }: { href: string; label: string; icon: React.ElementType }) => {
+const MoreNavLink = ({ href, label, icon: Icon, onClick }: { href: string; label: string; icon: React.ElementType, onClick: () => void }) => {
     const pathname = usePathname();
 
     const content = (
@@ -56,7 +56,7 @@ const MoreNavLink = ({ href, label, icon: Icon }: { href: string; label: string;
     );
 
     return (
-        <Link href={href} className={className}>
+        <Link href={href} className={className} onClick={onClick}>
             {content}
         </Link>
     )
@@ -65,6 +65,8 @@ const MoreNavLink = ({ href, label, icon: Icon }: { href: string; label: string;
 export default function MobileNav() {
   const pathname = usePathname();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isSheetOpen, setIsSheetOpen] = useState(false);
+
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -88,7 +90,7 @@ export default function MobileNav() {
         {allMainLinks.map((link) => (
           <NavLink key={link.href} {...link} />
         ))}
-        <Sheet>
+        <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
             <SheetTrigger asChild>
                  <button
                     className={cn(
@@ -108,7 +110,7 @@ export default function MobileNav() {
                 </SheetHeader>
                 <div className="mt-4 grid grid-cols-4 gap-2">
                     {sheetLinks.map(link => {
-                       return <MoreNavLink key={link.label} href={link.href} label={link.label} icon={link.icon} />
+                       return <MoreNavLink key={link.label} href={link.href} label={link.label} icon={link.icon} onClick={() => setIsSheetOpen(false)} />
                     })}
                 </div>
             </SheetContent>
