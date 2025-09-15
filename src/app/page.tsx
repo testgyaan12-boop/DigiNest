@@ -1,10 +1,35 @@
 
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { AppWindow, Code, BrainCircuit, Brush } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+
+const testimonials = [
+  {
+    name: "Sarah L.",
+    role: "CEO of Tech-Nex",
+    avatar: "https://picsum.photos/seed/sarah/128/128",
+    aiHint: "business woman",
+    review: "Novasuites revolutionized our development process. The platform is intuitive, powerful, and has everything we need to build and scale our products. We've cut our development time in half!"
+  },
+  {
+    name: "Michael B.",
+    role: "Lead Developer at Innovate Co.",
+    avatar: "https://picsum.photos/seed/michael/128/128",
+    aiHint: "male developer",
+    review: "As a developer, I appreciate the clean code, modern stack, and the seamless integration with Genkit. It makes building AI-powered features a breeze. Highly recommended!"
+  },
+  {
+    name: "David Chen",
+    role: "Founder of Creative Solutions",
+    avatar: "https://picsum.photos/seed/david/128/128",
+    aiHint: "startup founder",
+    review: "The UI/UX toolkit is fantastic. With the pre-built components and intuitive design system, we were able to create a beautiful and functional interface in record time. A game-changer for our startup."
+  }
+];
 
 export default function Home() {
   return (
@@ -110,6 +135,38 @@ export default function Home() {
                     </Card>
                 </TabsContent>
             </Tabs>
+        </div>
+      </section>
+
+      <section className="w-full py-12 md:py-24 lg:py-32">
+        <div className="container px-4 md:px-6">
+          <h2 className="text-3xl font-bold tracking-tighter text-center sm:text-4xl md:text-5xl">
+            What Our Clients Say
+          </h2>
+          <p className="max-w-2xl mx-auto mt-4 text-center text-muted-foreground md:text-xl">
+            Hear from the people who trust our platform to power their applications.
+          </p>
+          <div className="grid gap-8 mt-12 sm:grid-cols-2 lg:grid-cols-3">
+            {testimonials.map((testimonial) => (
+              <Card key={testimonial.name} className="flex flex-col">
+                <CardContent className="pt-6 flex-grow">
+                  <p className="text-muted-foreground">"{testimonial.review}"</p>
+                </CardContent>
+                <CardFooter>
+                  <div className="flex items-center gap-4">
+                    <Avatar>
+                        <AvatarImage src={testimonial.avatar} data-ai-hint={testimonial.aiHint} />
+                        <AvatarFallback>{testimonial.name.split(' ').map(n => n[0]).join('')}</AvatarFallback>
+                    </Avatar>
+                    <div>
+                        <p className="font-semibold">{testimonial.name}</p>
+                        <p className="text-sm text-muted-foreground">{testimonial.role}</p>
+                    </div>
+                  </div>
+                </CardFooter>
+              </Card>
+            ))}
+          </div>
         </div>
       </section>
     </div>
