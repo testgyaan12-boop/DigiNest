@@ -2,9 +2,11 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Home, User, Briefcase, Users, FileText, LayoutGrid, MoreHorizontal } from "lucide-react";
+import { Home, User, Briefcase, Users, FileText, LayoutGrid, MoreHorizontal, LogIn, UserPlus } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
 
 const mainNavLinks = [
   { href: "/", label: "Home", icon: Home },
@@ -68,7 +70,7 @@ export default function MobileNav() {
                  <button
                     className={cn(
                         "flex flex-col items-center justify-center gap-1 text-xs font-medium",
-                        moreNavLinks.some(l => l.href === pathname)
+                        [...moreNavLinks.map(l => l.href), "/profile"].some(l => l === pathname)
                         ? "text-primary"
                         : "text-muted-foreground hover:text-foreground"
                     )}
@@ -83,6 +85,30 @@ export default function MobileNav() {
                 </SheetHeader>
                 <div className="mt-4 grid grid-cols-4 gap-2">
                     {moreNavLinks.map(link => <MoreNavLink key={link.href} {...link} />)}
+                    <Dialog>
+                        <DialogTrigger asChild>
+                            <button className="flex flex-col items-center justify-center gap-1 rounded-lg p-4 text-base font-medium text-muted-foreground hover:bg-muted/50">
+                                <User className="h-6 w-6" />
+                                <span className="truncate text-xs">Profile</span>
+                            </button>
+                        </DialogTrigger>
+                        <DialogContent>
+                            <DialogHeader>
+                                <DialogTitle>Account</DialogTitle>
+                                <DialogDescription>
+                                    Log in or sign up to get started.
+                                </DialogDescription>
+                            </DialogHeader>
+                            <div className="flex flex-col gap-4 mt-4">
+                                <Button>
+                                    <LogIn /> Login
+                                </Button>
+                                <Button variant="secondary">
+                                    <UserPlus /> Sign Up
+                                </Button>
+                            </div>
+                        </DialogContent>
+                    </Dialog>
                 </div>
             </SheetContent>
         </Sheet>
