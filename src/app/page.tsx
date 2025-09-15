@@ -51,7 +51,7 @@ export default function Home() {
                 From backend logic to frontend magic, our platform has you covered.
             </p>
             <Tabs defaultValue="web-dev" className="mt-12">
-                <TabsList className="grid w-full grid-cols-2 md:grid-cols-4 md:w-auto mx-auto h-auto">
+                <TabsList className="grid w-full grid-cols-2 md:grid-cols-4 h-auto p-0">
                     <TabsTrigger value="web-dev" className="flex-col sm:flex-row">
                         <AppWindow className="mr-0 mb-2 sm:mr-2 sm:mb-0" />
                         Web Apps
