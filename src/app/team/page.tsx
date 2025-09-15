@@ -4,6 +4,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Linkedin, Share2, Copy } from "lucide-react";
 import Link from "next/link";
@@ -159,18 +160,26 @@ export default function TeamPage() {
       </p>
 
       <Tabs value={activeTab} onValueChange={setActiveTab} className="mt-12">
-        <TabsList className="grid w-full grid-cols-3 sm:grid-cols-6 h-auto">
-          {categories.map(category => (
-            <TabsTrigger key={category} value={category}>{category}</TabsTrigger>
-          ))}
-        </TabsList>
-        <TabsContent value={activeTab}>
-            <div className="grid gap-8 mt-8 md:grid-cols-2">
-                {filteredMembers.map((member) => (
-                    <TeamMemberCard key={member.name} member={member} />
-                ))}
-            </div>
-        </TabsContent>
+        <div className="flex justify-center">
+            <ScrollArea className="w-full max-w-2xl pb-4 whitespace-nowrap">
+                <TabsList className="inline-flex h-auto p-1">
+                    {categories.map(category => (
+                        <TabsTrigger key={category} value={category}>{category}</TabsTrigger>
+                    ))}
+                </TabsList>
+                <ScrollBar orientation="horizontal" />
+            </ScrollArea>
+        </div>
+        
+        {categories.map(category => (
+            <TabsContent key={category} value={category}>
+                <div className="grid gap-8 mt-8 md:grid-cols-2">
+                    {filteredMembers.map((member) => (
+                        <TeamMemberCard key={member.name} member={member} />
+                    ))}
+                </div>
+            </TabsContent>
+        ))}
       </Tabs>
     </div>
   );
