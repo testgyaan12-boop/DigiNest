@@ -132,7 +132,7 @@ export default function Header() {
       </header>
       
       <Dialog open={showAuthModal} onOpenChange={setShowAuthModal}>
-          <DialogContent className="sm:max-w-[425px]" onInteractOutside={(e) => e.preventDefault()}>
+          <DialogContent className="sm:max-w-[425px]">
               <DialogHeader>
                   <DialogTitle>Admin Access Required</DialogTitle>
                   <DialogDescription>

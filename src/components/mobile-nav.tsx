@@ -80,9 +80,8 @@ export default function MobileNav() {
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
-      const user = localStorage.getItem('user');
       const adminStatus = localStorage.getItem('isAdmin');
-      setIsAdmin(!!user && adminStatus === 'true');
+      setIsAdmin(adminStatus === 'true');
     }
   }, [pathname]); // Re-check on path change
   
