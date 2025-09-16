@@ -126,11 +126,11 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
             { id: 1, author: 'Jane Doe', text: 'Great insights, thanks for sharing!', avatar: 'https://picsum.photos/seed/jane-comment/40/40', date: '2 days ago' },
             { id: 2, author: 'Mike Smith', text: 'This was a very helpful read.', avatar: 'https://picsum.photos/seed/mike-comment/40/40', date: '1 day ago' },
         ]);
-    } else if (typeof window !== 'undefined') {
+    } else if (isClient) {
         // Only call notFound on the client-side after checking
         notFound();
     }
-  }, [params.slug]);
+  }, [params.slug, isClient]);
 
   const handleCommentSubmit = (e: React.FormEvent) => {
       e.preventDefault();
@@ -152,8 +152,13 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
       setNewComment('');
   };
   
-  if (!isClient) return null; // Or a loading spinner
-  if (!post) return null; // Handled by notFound on client
+  if (!isClient || !post) {
+    return (
+        <div className="flex items-center justify-center min-h-[calc(100vh-15rem)]">
+             <p>Loading post...</p>
+        </div>
+    );
+  }
 
   return (
     <div className="container py-12 md:py-16">
