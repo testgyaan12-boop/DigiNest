@@ -75,18 +75,22 @@ const MoreNavLink = ({ href, label, icon: Icon, onClick }: { href: string; label
 export default function MobileNav() {
   const pathname = usePathname();
   const [isSheetOpen, setIsSheetOpen] = useState(false);
-  const [isAdmin, setIsAdmin] = useState(false);
+  const [isAdminView, setIsAdminView] = useState(false);
 
 
   useEffect(() => {
+    // This effect runs on both path changes and when the component mounts on the client.
+    // It's the most reliable way to check localStorage.
     if (typeof window !== 'undefined') {
-      const adminStatus = localStorage.getItem('isAdmin');
-      setIsAdmin(adminStatus === 'true');
+      const adminStatus = localStorage.getItem('isAdmin') === 'true';
+      setIsAdminView(adminStatus);
     }
-  }, [pathname]); // Re-check on path change
+  }, [pathname]); // Re-check on path change to handle navigation events.
   
-  if (isAdmin) {
-    return null; // Don't show the main mobile nav for admins
+  if (isAdminView) {
+    // If we are in an admin view, do not render the standard mobile navigation.
+    // The admin layout has its own mobile-responsive sidebar.
+    return null; 
   }
   
   return (
