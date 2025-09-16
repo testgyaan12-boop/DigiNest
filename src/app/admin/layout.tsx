@@ -110,11 +110,9 @@ export default function AdminLayout({
         {/* Mobile-only fixed footer for sidebar trigger */}
         <footer className="fixed bottom-0 left-0 right-0 z-50 border-t bg-background md:hidden">
           <div className="flex h-16 items-center justify-around">
-            <SidebarTrigger asChild>
-                <Button variant="ghost" className="flex flex-col h-auto items-center justify-center gap-1 text-xs font-medium text-muted-foreground hover:text-foreground">
-                    <PanelLeft className="h-6 w-6"/>
-                    <span>Menu</span>
-                </Button>
+            <SidebarTrigger className="flex flex-col h-auto items-center justify-center gap-1 text-xs font-medium text-muted-foreground hover:text-foreground bg-transparent border-none hover:bg-transparent">
+              <PanelLeft className="h-6 w-6"/>
+              <span>Menu</span>
             </SidebarTrigger>
             <Button variant="ghost" onClick={handleLogout} className="flex flex-col h-auto items-center justify-center gap-1 text-xs font-medium text-muted-foreground hover:text-foreground">
                 <LogOut className="h-6 w-6"/>
