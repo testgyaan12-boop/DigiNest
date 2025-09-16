@@ -108,7 +108,6 @@ const ShareButton = ({ postTitle }: { postTitle: string }) => {
 };
 
 export default function BlogPostPage({ params }: { params: { slug: string } }) {
-  const { slug } = params;
   const [post, setPost] = useState<BlogPost | null>(null);
   const [comments, setComments] = useState<Comment[]>([]);
   const [newComment, setNewComment] = useState('');
@@ -118,7 +117,7 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
     setIsClient(true);
     const storedPosts = localStorage.getItem("blogPosts");
     const allPosts = storedPosts ? JSON.parse(storedPosts) : initialBlogPosts;
-    const foundPost = allPosts.find((p: BlogPost) => generateSlug(p.title) === slug);
+    const foundPost = allPosts.find((p: BlogPost) => generateSlug(p.title) === params.slug);
     
     if (foundPost) {
         setPost(foundPost);
@@ -131,7 +130,7 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
         // Only call notFound on the client-side after checking
         notFound();
     }
-  }, [slug]);
+  }, [params.slug]);
 
   const handleCommentSubmit = (e: React.FormEvent) => {
       e.preventDefault();
