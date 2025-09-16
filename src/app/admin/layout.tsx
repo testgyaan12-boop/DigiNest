@@ -185,7 +185,7 @@ export default function AdminLayout({
     if (storedAdminStatus === 'true') {
         setIsAdmin(true);
     } else {
-        router.push('/');
+        router.replace('/');
     }
     setIsLoading(false);
   }, [router]);
