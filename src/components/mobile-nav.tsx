@@ -3,7 +3,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Home, Briefcase, FileText, LayoutGrid, MoreHorizontal, Package, Phone, Users, Info, Newspaper, ListChecks } from "lucide-react";
+import { Home, Briefcase, FileText, LayoutGrid, MoreHorizontal, Package, Phone, Users, Info, Newspaper, ListChecks, Handshake } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { useEffect, useState } from "react";
@@ -19,6 +19,7 @@ const moreNavLinks = [
     { href: "/saas-platforms", label: "SaaS", icon: Package },
     { href: "/about", label: "About", icon: Users },
     { href: "/team", label: "Team", icon: Users },
+    { href: "/hire-developer", label: "Hire", icon: Handshake },
     { href: "/contact", label: "Contact", icon: Phone },
 ];
 

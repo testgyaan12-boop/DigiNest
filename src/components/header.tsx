@@ -87,6 +87,7 @@ export default function Header() {
                   <Link href="/portfolio">Portfolio</Link>
                   <Link href="/saas-platforms">SaaS Platforms</Link>
                   <Link href="/team">Team</Link>
+                  <Link href="/hire-developer">Hire Developer</Link>
                   <Link href="/blog">Blog</Link>
                   <Link href="/contact">Contact</Link>
                 </>
