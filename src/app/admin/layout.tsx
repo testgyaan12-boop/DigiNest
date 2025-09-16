@@ -2,27 +2,32 @@
 'use client';
 
 import { SidebarProvider, Sidebar, SidebarHeader, SidebarContent, SidebarMenu, SidebarMenuItem, SidebarMenuButton } from "@/components/ui/sidebar";
-import { Users, Briefcase, Info, LogOut, Newspaper, ListChecks } from "lucide-react";
+import { Users, Briefcase, Info, LogOut, Newspaper, ListChecks, MoreHorizontal } from "lucide-react";
 import Link from 'next/link';
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
-
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 
 const adminNavLinks = [
   { href: "/admin/team", label: "Team", icon: Users },
   { href: "/admin/services", label: "Services", icon: Briefcase },
-  { href: "/admin/about", label: "About", icon: Info },
   { href: "/admin/blog", label: "Blog", icon: Newspaper },
   { href: "/admin/projects", label: "Projects", icon: ListChecks },
 ];
 
-const AdminNavLink = ({ href, label, icon: Icon }: { href: string; label: string; icon: React.ElementType }) => {
+const moreAdminLinks = [
+  { href: "/admin/about", label: "About", icon: Info },
+];
+
+
+const AdminNavLink = ({ href, label, icon: Icon, onClick }: { href: string; label: string; icon: React.ElementType, onClick?: () => void }) => {
     const pathname = usePathname();
     const isActive = pathname.startsWith(href);
     return (
         <Link
             href={href}
+            onClick={onClick}
             className={cn(
               "flex flex-col items-center justify-center gap-1 text-xs font-medium",
               isActive
@@ -45,6 +50,8 @@ export default function AdminLayout({
   const router = useRouter();
   const [isAdmin, setIsAdmin] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [isSheetOpen, setIsSheetOpen] = useState(false);
+
 
   useEffect(() => {
     const storedAdminStatus = localStorage.getItem('isAdmin');
@@ -139,17 +146,38 @@ export default function AdminLayout({
 
         {/* Mobile-only fixed footer navigation */}
         <footer className="fixed bottom-0 left-0 right-0 z-50 border-t bg-background md:hidden">
-          <div className="grid h-16 grid-cols-6 items-center justify-around">
+          <div className="grid h-16 grid-cols-5 items-center justify-around">
             {adminNavLinks.map((link) => (
                 <AdminNavLink key={link.href} {...link} />
             ))}
-            <button
-                onClick={handleLogout}
-                className="flex flex-col items-center justify-center gap-1 text-xs font-medium text-muted-foreground hover:text-foreground"
-            >
-                <LogOut className="h-6 w-6"/>
-                <span>Logout</span>
-            </button>
+            <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
+                <SheetTrigger asChild>
+                    <button className="flex flex-col items-center justify-center gap-1 text-xs font-medium text-muted-foreground hover:text-foreground">
+                        <MoreHorizontal className="h-6 w-6" />
+                        <span className="truncate">More</span>
+                    </button>
+                </SheetTrigger>
+                <SheetContent side="bottom" className="h-auto">
+                    <SheetHeader>
+                        <SheetTitle>More Options</SheetTitle>
+                    </SheetHeader>
+                    <div className="mt-4 grid grid-cols-4 gap-4">
+                        {moreAdminLinks.map(link => (
+                            <AdminNavLink key={link.href} {...link} onClick={() => setIsSheetOpen(false)} />
+                        ))}
+                         <button
+                            onClick={() => {
+                                setIsSheetOpen(false);
+                                handleLogout();
+                            }}
+                            className="flex flex-col items-center justify-center gap-1 text-xs font-medium text-muted-foreground hover:text-foreground"
+                        >
+                            <LogOut className="h-6 w-6"/>
+                            <span>Logout</span>
+                        </button>
+                    </div>
+                </SheetContent>
+            </Sheet>
           </div>
         </footer>
       </div>
