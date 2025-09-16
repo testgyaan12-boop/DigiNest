@@ -48,11 +48,10 @@ export default function AdminLayout({
 
   return (
     <SidebarProvider>
-      <div className="flex">
+      <div className="flex min-h-screen">
         <Sidebar>
-          <SidebarHeader className="p-2 flex items-center justify-between">
+          <SidebarHeader>
               <h2 className="font-semibold text-lg group-data-[collapsible=icon]:hidden">Admin Panel</h2>
-              <SidebarTrigger className="md:hidden" />
           </SidebarHeader>
           <SidebarContent>
             <SidebarMenu>
@@ -99,8 +98,14 @@ export default function AdminLayout({
               </SidebarMenu>
           </SidebarFooter>
         </Sidebar>
-        <main className="flex-1">
-          {children}
+        <main className="flex-1 flex flex-col">
+          <header className="flex h-14 items-center gap-4 border-b bg-muted/40 px-6 md:hidden">
+              <SidebarTrigger />
+              <h1 className="font-semibold text-lg">Admin</h1>
+          </header>
+          <div className="flex-1 overflow-auto">
+            {children}
+          </div>
         </main>
       </div>
     </SidebarProvider>

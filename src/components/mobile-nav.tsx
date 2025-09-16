@@ -71,10 +71,7 @@ export default function MobileNav() {
 
 
   useEffect(() => {
-    if (typeof window !== 'undefined') {
-      const adminPath = pathname.startsWith('/admin');
-      setIsAdminView(adminPath);
-    }
+    setIsAdminView(pathname.startsWith('/admin'));
   }, [pathname]);
   
   if (isAdminView) {

@@ -1,7 +1,23 @@
+
+'use client';
+
 import Link from "next/link";
 import { Code2 } from "lucide-react";
+import { usePathname } from "next/navigation";
+import { useEffect, useState } from "react";
 
 export default function Footer() {
+    const pathname = usePathname();
+    const [isAdminView, setIsAdminView] = useState(false);
+
+    useEffect(() => {
+        setIsAdminView(pathname.startsWith('/admin'));
+    }, [pathname]);
+
+    if (isAdminView) {
+        return null;
+    }
+
     return (
         <footer className="border-t pb-24 md:pb-0">
             <div className="container flex flex-col items-center justify-between gap-6 py-8 md:flex-row">
