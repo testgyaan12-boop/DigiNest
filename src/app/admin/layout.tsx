@@ -1,26 +1,40 @@
 
 'use client';
 
-import { SidebarProvider, Sidebar, SidebarHeader, SidebarContent, SidebarMenu, SidebarMenuItem, SidebarMenuButton, SidebarFooter, useSidebar } from "@/components/ui/sidebar";
-import { Users, Briefcase, Info, LogOut, Newspaper, ListChecks, PanelLeft } from "lucide-react";
+import { SidebarProvider, Sidebar, SidebarHeader, SidebarContent, SidebarMenu, SidebarMenuItem, SidebarMenuButton } from "@/components/ui/sidebar";
+import { Users, Briefcase, Info, LogOut, Newspaper, ListChecks } from "lucide-react";
+import Link from 'next/link';
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 
-// A custom trigger component that uses the useSidebar hook to control the sheet.
-function MobileSidebarTrigger() {
-    const { toggleSidebar } = useSidebar();
+
+const adminNavLinks = [
+  { href: "/admin/team", label: "Team", icon: Users },
+  { href: "/admin/services", label: "Services", icon: Briefcase },
+  { href: "/admin/about", label: "About", icon: Info },
+  { href: "/admin/blog", label: "Blog", icon: Newspaper },
+  { href: "/admin/projects", label: "Projects", icon: ListChecks },
+];
+
+const AdminNavLink = ({ href, label, icon: Icon }: { href: string; label: string; icon: React.ElementType }) => {
+    const pathname = usePathname();
+    const isActive = pathname.startsWith(href);
     return (
-        <button
-            onClick={toggleSidebar}
-            className="flex flex-col h-auto items-center justify-center gap-1 text-xs font-medium text-muted-foreground hover:text-foreground bg-transparent border-none hover:bg-transparent"
-        >
-            <PanelLeft className="h-6 w-6"/>
-            <span>Menu</span>
-        </button>
+        <Link
+            href={href}
+            className={cn(
+              "flex flex-col items-center justify-center gap-1 text-xs font-medium",
+              isActive
+                ? "text-primary"
+                : "text-muted-foreground hover:text-foreground"
+            )}
+          >
+            <Icon className="h-6 w-6" />
+            <span className="truncate">{label}</span>
+        </Link>
     )
 }
-
 
 export default function AdminLayout({
   children,
@@ -65,7 +79,8 @@ export default function AdminLayout({
   return (
     <SidebarProvider>
       <div className="flex min-h-screen">
-        <Sidebar>
+        {/* Desktop Sidebar */}
+        <Sidebar className="hidden md:block">
           <SidebarHeader>
               <h2 className="font-semibold text-lg group-data-[collapsible=icon]:hidden">Admin Panel</h2>
           </SidebarHeader>
@@ -103,33 +118,38 @@ export default function AdminLayout({
               </SidebarMenuItem>
             </SidebarMenu>
           </SidebarContent>
-          <SidebarFooter>
-              <SidebarMenu>
-                  <SidebarMenuItem>
-                      <SidebarMenuButton onClick={handleLogout} tooltip={{ children: 'Logout' }}>
-                          <LogOut />
-                          <span>Logout</span>
-                      </SidebarMenuButton>
-                  </SidebarMenuItem>
-              </SidebarMenu>
-          </SidebarFooter>
+           <SidebarMenu>
+              <SidebarMenuItem>
+                  <SidebarMenuButton onClick={handleLogout} tooltip={{ children: 'Logout' }}>
+                      <LogOut />
+                      <span>Logout</span>
+                  </SidebarMenuButton>
+              </SidebarMenuItem>
+          </SidebarMenu>
         </Sidebar>
+
         <main className="flex-1 flex flex-col pb-16 md:pb-0">
-          <header className="flex h-14 items-center gap-4 border-b bg-muted/40 px-6 md:hidden">
-              <h1 className="font-semibold text-lg">Admin</h1>
+           <header className="flex h-14 items-center justify-between border-b bg-muted/40 px-6 md:hidden">
+              <h1 className="font-semibold text-lg">Admin Panel</h1>
           </header>
           <div className="flex-1 overflow-auto">
             {children}
           </div>
         </main>
-        {/* Mobile-only fixed footer for sidebar trigger */}
+
+        {/* Mobile-only fixed footer navigation */}
         <footer className="fixed bottom-0 left-0 right-0 z-50 border-t bg-background md:hidden">
-          <div className="flex h-16 items-center justify-around">
-            <MobileSidebarTrigger />
-            <Button variant="ghost" onClick={handleLogout} className="flex flex-col h-auto items-center justify-center gap-1 text-xs font-medium text-muted-foreground hover:text-foreground">
+          <div className="grid h-16 grid-cols-6 items-center justify-around">
+            {adminNavLinks.map((link) => (
+                <AdminNavLink key={link.href} {...link} />
+            ))}
+            <button
+                onClick={handleLogout}
+                className="flex flex-col items-center justify-center gap-1 text-xs font-medium text-muted-foreground hover:text-foreground"
+            >
                 <LogOut className="h-6 w-6"/>
                 <span>Logout</span>
-            </Button>
+            </button>
           </div>
         </footer>
       </div>
