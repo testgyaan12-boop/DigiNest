@@ -22,14 +22,6 @@ const moreNavLinks = [
     { href: "/contact", label: "Contact", icon: Phone },
 ];
 
-const adminNavLinks = [
-    { href: "/admin/team", label: "Team", icon: Users },
-    { href: "/admin/services", label: "Services", icon: Briefcase },
-    { href: "/admin/about", label: "About", icon: Info },
-    { href: "/admin/blog", label: "Blog", icon: Newspaper },
-    { href: "/admin/projects", label: "Projects", icon: ListChecks },
-]
-
 const NavLink = ({ href, label, icon: Icon }: { href: string; label: string; icon: React.ElementType }) => {
     const pathname = usePathname();
     return (
@@ -86,8 +78,6 @@ export default function MobileNav() {
   }, [pathname]);
   
   if (isAdminView) {
-    // The admin layout has its own responsive sidebar for mobile.
-    // So we don't render the standard mobile nav on admin pages.
     return null; 
   }
   

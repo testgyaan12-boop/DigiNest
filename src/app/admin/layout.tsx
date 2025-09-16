@@ -48,59 +48,61 @@ export default function AdminLayout({
 
   return (
     <SidebarProvider>
-      <Sidebar>
-        <SidebarHeader>
-            <SidebarTrigger />
-            <h2 className="font-semibold text-lg group-data-[collapsible=icon]:hidden">Admin Panel</h2>
-        </SidebarHeader>
-        <SidebarContent>
-          <SidebarMenu>
-            <SidebarMenuItem>
-              <SidebarMenuButton href="/admin/team" isActive={pathname.startsWith('/admin/team')} tooltip={{ children: 'Manage Team' }}>
-                <Users />
-                <span>Manage Team</span>
-              </SidebarMenuButton>
-            </SidebarMenuItem>
-            <SidebarMenuItem>
-              <SidebarMenuButton href="/admin/services" isActive={pathname.startsWith('/admin/services')} tooltip={{ children: 'Manage Services' }}>
-                <Briefcase />
-                <span>Manage Services</span>
-              </SidebarMenuButton>
-            </SidebarMenuItem>
-            <SidebarMenuItem>
-              <SidebarMenuButton href="/admin/about" isActive={pathname.startsWith('/admin/about')} tooltip={{ children: 'Manage About' }}>
-                <Info />
-                <span>Manage About</span>
-              </SidebarMenuButton>
-            </SidebarMenuItem>
-             <SidebarMenuItem>
-              <SidebarMenuButton href="/admin/blog" isActive={pathname.startsWith('/admin/blog')} tooltip={{ children: 'Manage Blog' }}>
-                <Newspaper />
-                <span>Manage Blog</span>
-              </SidebarMenuButton>
-            </SidebarMenuItem>
-             <SidebarMenuItem>
-              <SidebarMenuButton href="/admin/projects" isActive={pathname.startsWith('/admin/projects')} tooltip={{ children: 'Manage Projects' }}>
-                <ListChecks />
-                <span>Manage Projects</span>
-              </SidebarMenuButton>
-            </SidebarMenuItem>
-          </SidebarMenu>
-        </SidebarContent>
-        <SidebarFooter>
+      <div className="flex">
+        <Sidebar>
+          <SidebarHeader className="p-2 flex items-center justify-between">
+              <h2 className="font-semibold text-lg group-data-[collapsible=icon]:hidden">Admin Panel</h2>
+              <SidebarTrigger className="md:hidden" />
+          </SidebarHeader>
+          <SidebarContent>
             <SidebarMenu>
-                <SidebarMenuItem>
-                    <SidebarMenuButton onClick={handleLogout} tooltip={{ children: 'Logout' }}>
-                        <LogOut />
-                        <span>Logout</span>
-                    </SidebarMenuButton>
-                </SidebarMenuItem>
+              <SidebarMenuItem>
+                <SidebarMenuButton href="/admin/team" isActive={pathname.startsWith('/admin/team')} tooltip={{ children: 'Manage Team' }}>
+                  <Users />
+                  <span>Manage Team</span>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+              <SidebarMenuItem>
+                <SidebarMenuButton href="/admin/services" isActive={pathname.startsWith('/admin/services')} tooltip={{ children: 'Manage Services' }}>
+                  <Briefcase />
+                  <span>Manage Services</span>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+              <SidebarMenuItem>
+                <SidebarMenuButton href="/admin/about" isActive={pathname.startsWith('/admin/about')} tooltip={{ children: 'Manage About' }}>
+                  <Info />
+                  <span>Manage About</span>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+              <SidebarMenuItem>
+                <SidebarMenuButton href="/admin/blog" isActive={pathname.startsWith('/admin/blog')} tooltip={{ children: 'Manage Blog' }}>
+                  <Newspaper />
+                  <span>Manage Blog</span>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+              <SidebarMenuItem>
+                <SidebarMenuButton href="/admin/projects" isActive={pathname.startsWith('/admin/projects')} tooltip={{ children: 'Manage Projects' }}>
+                  <ListChecks />
+                  <span>Manage Projects</span>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
             </SidebarMenu>
-        </SidebarFooter>
-      </Sidebar>
-      <main className="flex-1">
-        {children}
-      </main>
+          </SidebarContent>
+          <SidebarFooter>
+              <SidebarMenu>
+                  <SidebarMenuItem>
+                      <SidebarMenuButton onClick={handleLogout} tooltip={{ children: 'Logout' }}>
+                          <LogOut />
+                          <span>Logout</span>
+                      </SidebarMenuButton>
+                  </SidebarMenuItem>
+              </SidebarMenu>
+          </SidebarFooter>
+        </Sidebar>
+        <main className="flex-1">
+          {children}
+        </main>
+      </div>
     </SidebarProvider>
   );
 }
