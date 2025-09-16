@@ -46,14 +46,20 @@ export default function Header() {
             </span>
           </Link>
           <nav className="flex items-center space-x-6 text-sm font-medium">
-            <Link href="/">Home</Link>
-            <Link href="/about">About</Link>
-            <Link href="/services">Services</Link>
-            <Link href="/portfolio">Portfolio</Link>
-            <Link href="/saas-platforms">SaaS Platforms</Link>
-            <Link href="/team">Team</Link>
-            <Link href="/blog">Blog</Link>
-            <Link href="/contact">Contact</Link>
+            {isAdmin ? (
+              <Link href="/admin">Admin</Link>
+            ) : (
+              <>
+                <Link href="/">Home</Link>
+                <Link href="/about">About</Link>
+                <Link href="/services">Services</Link>
+                <Link href="/portfolio">Portfolio</Link>
+                <Link href="/saas-platforms">SaaS Platforms</Link>
+                <Link href="/team">Team</Link>
+                <Link href="/blog">Blog</Link>
+                <Link href="/contact">Contact</Link>
+              </>
+            )}
           </nav>
         </div>
         <div className="flex flex-1 items-center justify-end space-x-2">
