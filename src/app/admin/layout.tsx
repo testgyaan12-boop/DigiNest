@@ -6,11 +6,6 @@ import { Users, Briefcase, Info, LogOut, Newspaper, ListChecks } from "lucide-re
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { Label } from "@/components/ui/label";
-
-const ADMIN_ACCESS_CODE = 'admin123'; // Simple hardcoded access code
 
 export default function AdminLayout({
   children,
@@ -20,31 +15,18 @@ export default function AdminLayout({
   const pathname = usePathname();
   const router = useRouter();
   const [isAdmin, setIsAdmin] = useState(false);
-  const [showAuthModal, setShowAuthModal] = useState(true);
-  const [inputCode, setInputCode] = useState('');
-  const [error, setError] = useState('');
 
   useEffect(() => {
     // Check for admin status in localStorage
     const storedAdminStatus = localStorage.getItem('isAdmin');
     if (storedAdminStatus === 'true') {
         setIsAdmin(true);
-        setShowAuthModal(false);
     } else {
-        setShowAuthModal(true);
+        // If not an admin, redirect to home page.
+        // The authentication is now handled in the Header component.
+        router.push('/');
     }
-  }, []);
-
-  const handleCodeSubmit = () => {
-    if (inputCode === ADMIN_ACCESS_CODE) {
-      localStorage.setItem('isAdmin', 'true');
-      setIsAdmin(true);
-      setShowAuthModal(false);
-      setError('');
-    } else {
-      setError('Invalid access code. Please try again.');
-    }
-  };
+  }, [router]);
 
   const handleLogout = () => {
     localStorage.removeItem('isAdmin');
@@ -56,34 +38,12 @@ export default function AdminLayout({
   }
 
   if (!isAdmin) {
+    // Render a loading state or null while we check for admin status
+    // to prevent flashing the admin content.
     return (
-        <Dialog open={showAuthModal} onOpenChange={setShowAuthModal}>
-            <DialogContent className="sm:max-w-[425px]" onInteractOutside={(e) => e.preventDefault()}>
-                <DialogHeader>
-                    <DialogTitle>Admin Access Required</DialogTitle>
-                    <DialogDescription>
-                        Please enter the access code to view the admin dashboard.
-                    </DialogDescription>
-                </DialogHeader>
-                <div className="grid gap-4 py-4">
-                    <div className="grid grid-cols-4 items-center gap-4">
-                        <Label htmlFor="access-code" className="text-right">
-                            Code
-                        </Label>
-                        <Input
-                            id="access-code"
-                            type="password"
-                            value={inputCode}
-                            onChange={(e) => setInputCode(e.target.value)}
-                            className="col-span-3"
-                            onKeyDown={(e) => e.key === 'Enter' && handleCodeSubmit()}
-                        />
-                    </div>
-                     {error && <p className="text-destructive text-sm text-center col-span-4">{error}</p>}
-                </div>
-                <Button onClick={handleCodeSubmit}>Authenticate</Button>
-            </DialogContent>
-        </Dialog>
+        <div className="flex items-center justify-center h-screen">
+            <p>Verifying access...</p>
+        </div>
     );
   }
 

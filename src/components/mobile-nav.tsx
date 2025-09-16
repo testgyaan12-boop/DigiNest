@@ -3,7 +3,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Home, Briefcase, FileText, LayoutGrid, MoreHorizontal, Package, Phone, Shield, Users } from "lucide-react";
+import { Home, Briefcase, FileText, LayoutGrid, MoreHorizontal, Package, Phone, Users, Info, Newspaper, ListChecks } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { useEffect, useState } from "react";
@@ -23,10 +23,11 @@ const moreNavLinks = [
 ];
 
 const adminNavLinks = [
-    { href: "/admin", label: "Admin", icon: Shield },
-    { href: "/about", label: "About", icon: Users },
-    { href: "/team", label: "Team", icon: Users },
-    { href: "/contact", label: "Contact", icon: Phone },
+    { href: "/admin/team", label: "Team", icon: Users },
+    { href: "/admin/services", label: "Services", icon: Briefcase },
+    { href: "/admin/about", label: "About", icon: Info },
+    { href: "/admin/blog", label: "Blog", icon: Newspaper },
+    { href: "/admin/projects", label: "Projects", icon: ListChecks },
 ]
 
 const NavLink = ({ href, label, icon: Icon }: { href: string; label: string; icon: React.ElementType }) => {
@@ -83,14 +84,16 @@ export default function MobileNav() {
       const adminStatus = localStorage.getItem('isAdmin');
       setIsAdmin(!!user && adminStatus === 'true');
     }
-  }, []);
+  }, [pathname]); // Re-check on path change
   
-  const currentSheetLinks = isAdmin ? adminNavLinks : moreNavLinks;
+  if (isAdmin) {
+    return null; // Don't show the main mobile nav for admins
+  }
   
   return (
     <nav className="fixed bottom-0 left-0 right-0 z-50 border-t bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 md:hidden">
-      <div className={cn("grid h-16 items-center justify-around", isAdmin ? 'grid-cols-1' : 'grid-cols-5')}>
-        {!isAdmin && mainNavLinks.map((link) => (
+      <div className="grid h-16 grid-cols-5 items-center justify-around">
+        {mainNavLinks.map((link) => (
           <NavLink key={link.href} {...link} />
         ))}
         <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
@@ -98,7 +101,7 @@ export default function MobileNav() {
                  <button
                     className={cn(
                         "flex flex-col items-center justify-center gap-1 text-xs font-medium",
-                        currentSheetLinks.some(l => pathname.startsWith(l.href) && l.href !== '/')
+                        moreNavLinks.some(l => pathname.startsWith(l.href) && l.href !== '/')
                         ? "text-primary"
                         : "text-muted-foreground hover:text-foreground"
                     )}
@@ -112,7 +115,7 @@ export default function MobileNav() {
                     <SheetTitle>More</SheetTitle>
                 </SheetHeader>
                 <div className="mt-4 grid grid-cols-4 gap-2">
-                    {currentSheetLinks.map(link => {
+                    {moreNavLinks.map(link => {
                        return <MoreNavLink key={link.label} href={link.href} label={link.label} icon={link.icon} onClick={() => setIsSheetOpen(false)} />
                     })}
                 </div>
