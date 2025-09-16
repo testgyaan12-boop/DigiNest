@@ -4,24 +4,29 @@
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { ModeToggle } from './mode-toggle';
-import { Code2, UserCircle } from 'lucide-react';
+import { Code2, UserCircle, Shield } from 'lucide-react';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { useEffect, useState } from 'react';
 
 export default function Header() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
 
   useEffect(() => {
     // Since localStorage is a browser API, we need to check for it in useEffect.
     if (typeof window !== 'undefined') {
       const user = localStorage.getItem('user');
+      const adminStatus = localStorage.getItem('isAdmin');
       setIsLoggedIn(!!user);
+      setIsAdmin(!!user && adminStatus === 'true');
     }
   }, []);
 
   const handleLogout = () => {
     localStorage.removeItem('user');
+    localStorage.removeItem('isAdmin'); // Clear admin status on logout
     setIsLoggedIn(false);
+    setIsAdmin(false);
     window.location.href = '/'; // Redirect to home
   };
 
@@ -69,6 +74,15 @@ export default function Header() {
                     <DropdownMenuSeparator />
                     <DropdownMenuItem asChild><Link href="/profile">Profile</Link></DropdownMenuItem>
                     <DropdownMenuItem asChild><Link href="/my-projects">My Projects</Link></DropdownMenuItem>
+                    {isAdmin && (
+                        <DropdownMenuItem asChild>
+                            <Link href="/admin" className="flex items-center gap-2">
+                                <Shield className="h-4 w-4" />
+                                Admin
+                            </Link>
+                        </DropdownMenuItem>
+                    )}
+                    <DropdownMenuSeparator />
                     <DropdownMenuItem onClick={handleLogout}>Logout</DropdownMenuItem>
                   </>
                 ) : (

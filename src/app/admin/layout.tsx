@@ -1,9 +1,9 @@
 
 'use client';
 
-import { SidebarProvider, Sidebar, SidebarHeader, SidebarTrigger, SidebarContent, SidebarMenu, SidebarMenuItem, SidebarMenuButton, SidebarFooter, SidebarInset } from "@/components/ui/sidebar";
-import { Users, Briefcase, Info, MoreHorizontal } from "lucide-react";
-import { usePathname } from "next/navigation";
+import { SidebarProvider, Sidebar, SidebarHeader, SidebarTrigger, SidebarContent, SidebarMenu, SidebarMenuItem, SidebarMenuButton, SidebarFooter } from "@/components/ui/sidebar";
+import { Users, Briefcase, Info, LogOut, Newspaper, ListChecks } from "lucide-react";
+import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
@@ -18,6 +18,7 @@ export default function AdminLayout({
   children: React.ReactNode;
 }) {
   const pathname = usePathname();
+  const router = useRouter();
   const [isAdmin, setIsAdmin] = useState(false);
   const [showAuthModal, setShowAuthModal] = useState(true);
   const [inputCode, setInputCode] = useState('');
@@ -44,6 +45,15 @@ export default function AdminLayout({
       setError('Invalid access code. Please try again.');
     }
   };
+
+  const handleLogout = () => {
+    localStorage.removeItem('isAdmin');
+    localStorage.removeItem('user'); // Also log out from general session
+    setIsAdmin(false);
+    router.push('/');
+    // We need to reload to ensure all states are cleared.
+    setTimeout(() => window.location.reload(), 100);
+  }
 
   if (!isAdmin) {
     return (
@@ -81,7 +91,8 @@ export default function AdminLayout({
     <SidebarProvider>
       <Sidebar>
         <SidebarHeader>
-          <SidebarTrigger />
+            <SidebarTrigger />
+            <h2 className="font-semibold text-lg group-data-[collapsible=icon]:hidden">Admin Panel</h2>
         </SidebarHeader>
         <SidebarContent>
           <SidebarMenu>
@@ -103,22 +114,34 @@ export default function AdminLayout({
                 <span>Manage About</span>
               </SidebarMenuButton>
             </SidebarMenuItem>
+             <SidebarMenuItem>
+              <SidebarMenuButton href="/admin/blog" isActive={pathname.startsWith('/admin/blog')} tooltip={{ children: 'Manage Blog' }}>
+                <Newspaper />
+                <span>Manage Blog</span>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+             <SidebarMenuItem>
+              <SidebarMenuButton href="/admin/projects" isActive={pathname.startsWith('/admin/projects')} tooltip={{ children: 'Manage Projects' }}>
+                <ListChecks />
+                <span>Manage Projects</span>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
           </SidebarMenu>
         </SidebarContent>
         <SidebarFooter>
             <SidebarMenu>
                 <SidebarMenuItem>
-                    <SidebarMenuButton tooltip={{ children: 'More' }}>
-                        <MoreHorizontal />
-                        <span>More</span>
+                    <SidebarMenuButton onClick={handleLogout} tooltip={{ children: 'Logout' }}>
+                        <LogOut />
+                        <span>Logout</span>
                     </SidebarMenuButton>
                 </SidebarMenuItem>
             </SidebarMenu>
         </SidebarFooter>
       </Sidebar>
-      <SidebarInset>
+      <div className="flex-1">
         {children}
-      </SidebarInset>
+      </div>
     </SidebarProvider>
   );
 }
