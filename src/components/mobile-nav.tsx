@@ -3,7 +3,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Home, User, Briefcase, Users, FileText, LayoutGrid, MoreHorizontal, LogIn, UserPlus, LogOut, Package, Phone, Shield } from "lucide-react";
+import { Home, Briefcase, FileText, LayoutGrid, MoreHorizontal, Package, Phone, Shield, Users } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { useEffect, useState } from "react";
@@ -20,7 +20,13 @@ const moreNavLinks = [
     { href: "/about", label: "About", icon: Users },
     { href: "/team", label: "Team", icon: Users },
     { href: "/contact", label: "Contact", icon: Phone },
+];
+
+const adminNavLinks = [
     { href: "/admin", label: "Admin", icon: Shield },
+    { href: "/about", label: "About", icon: Users },
+    { href: "/team", label: "Team", icon: Users },
+    { href: "/contact", label: "Contact", icon: Phone },
 ]
 
 const NavLink = ({ href, label, icon: Icon }: { href: string; label: string; icon: React.ElementType }) => {
@@ -67,30 +73,24 @@ const MoreNavLink = ({ href, label, icon: Icon, onClick }: { href: string; label
 
 export default function MobileNav() {
   const pathname = usePathname();
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isSheetOpen, setIsSheetOpen] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
 
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
       const user = localStorage.getItem('user');
-      setIsLoggedIn(!!user);
+      const adminStatus = localStorage.getItem('isAdmin');
+      setIsAdmin(!!user && adminStatus === 'true');
     }
   }, []);
-
-  const handleLogout = () => {
-    localStorage.removeItem('user');
-    setIsLoggedIn(false);
-    window.location.href = '/'; 
-  };
   
-  const allMainLinks = [...mainNavLinks];
-  const sheetLinks = [...moreNavLinks];
+  const currentSheetLinks = isAdmin ? adminNavLinks : moreNavLinks;
   
   return (
     <nav className="fixed bottom-0 left-0 right-0 z-50 border-t bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 md:hidden">
-      <div className="grid h-16 grid-cols-5 items-center justify-around">
-        {allMainLinks.map((link) => (
+      <div className={cn("grid h-16 items-center justify-around", isAdmin ? 'grid-cols-1' : 'grid-cols-5')}>
+        {!isAdmin && mainNavLinks.map((link) => (
           <NavLink key={link.href} {...link} />
         ))}
         <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
@@ -98,7 +98,7 @@ export default function MobileNav() {
                  <button
                     className={cn(
                         "flex flex-col items-center justify-center gap-1 text-xs font-medium",
-                        sheetLinks.some(l => pathname.startsWith(l.href) && l.href !== '/')
+                        currentSheetLinks.some(l => pathname.startsWith(l.href) && l.href !== '/')
                         ? "text-primary"
                         : "text-muted-foreground hover:text-foreground"
                     )}
@@ -112,7 +112,7 @@ export default function MobileNav() {
                     <SheetTitle>More</SheetTitle>
                 </SheetHeader>
                 <div className="mt-4 grid grid-cols-4 gap-2">
-                    {sheetLinks.map(link => {
+                    {currentSheetLinks.map(link => {
                        return <MoreNavLink key={link.label} href={link.href} label={link.label} icon={link.icon} onClick={() => setIsSheetOpen(false)} />
                     })}
                 </div>
