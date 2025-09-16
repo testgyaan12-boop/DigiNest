@@ -115,22 +115,26 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
 
   useEffect(() => {
     setIsClient(true);
-    const storedPosts = localStorage.getItem("blogPosts");
-    const allPosts = storedPosts ? JSON.parse(storedPosts) : initialBlogPosts;
-    const foundPost = allPosts.find((p: BlogPost) => generateSlug(p.title) === params.slug);
-    
-    if (foundPost) {
-        setPost(foundPost);
-        const storedComments = localStorage.getItem(`comments_${foundPost.id}`);
-        setComments(storedComments ? JSON.parse(storedComments) : [
-            { id: 1, author: 'Jane Doe', text: 'Great insights, thanks for sharing!', avatar: 'https://picsum.photos/seed/jane-comment/40/40', date: '2 days ago' },
-            { id: 2, author: 'Mike Smith', text: 'This was a very helpful read.', avatar: 'https://picsum.photos/seed/mike-comment/40/40', date: '1 day ago' },
-        ]);
-    } else if (isClient) {
-        // Only call notFound on the client-side after checking
-        notFound();
+  }, []);
+
+  useEffect(() => {
+    if (isClient) {
+        const storedPosts = localStorage.getItem("blogPosts");
+        const allPosts = storedPosts ? JSON.parse(storedPosts) : initialBlogPosts;
+        const foundPost = allPosts.find((p: BlogPost) => generateSlug(p.title) === params.slug);
+        
+        if (foundPost) {
+            setPost(foundPost);
+            const storedComments = localStorage.getItem(`comments_${foundPost.id}`);
+            setComments(storedComments ? JSON.parse(storedComments) : [
+                { id: 1, author: 'Jane Doe', text: 'Great insights, thanks for sharing!', avatar: 'https://picsum.photos/seed/jane-comment/40/40', date: '2 days ago' },
+                { id: 2, author: 'Mike Smith', text: 'This was a very helpful read.', avatar: 'https://picsum.photos/seed/mike-comment/40/40', date: '1 day ago' },
+            ]);
+        } else {
+            notFound();
+        }
     }
-  }, [params.slug, isClient]);
+  }, [isClient, params.slug]);
 
   const handleCommentSubmit = (e: React.FormEvent) => {
       e.preventDefault();
@@ -152,7 +156,7 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
       setNewComment('');
   };
   
-  if (!isClient || !post) {
+  if (!post) {
     return (
         <div className="flex items-center justify-center min-h-[calc(100vh-15rem)]">
              <p>Loading post...</p>
