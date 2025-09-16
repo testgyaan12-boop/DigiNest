@@ -35,6 +35,7 @@ type SidebarContext = {
   setOpenMobile: (open: boolean) => void
   isMobile: boolean
   toggleSidebar: () => void
+  closeMobile: () => void
 }
 
 const SidebarContext = React.createContext<SidebarContext | null>(null)
@@ -89,6 +90,10 @@ const SidebarProvider = React.forwardRef<
       },
       [setOpenProp, open]
     )
+    
+    const closeMobile = React.useCallback(() => {
+        setOpenMobile(false)
+    }, [])
 
     // Helper to toggle the sidebar.
     const toggleSidebar = React.useCallback(() => {
@@ -126,8 +131,9 @@ const SidebarProvider = React.forwardRef<
         openMobile,
         setOpenMobile,
         toggleSidebar,
+        closeMobile
       }),
-      [state, open, setOpen, isMobile, openMobile, setOpenMobile, toggleSidebar]
+      [state, open, setOpen, isMobile, openMobile, setOpenMobile, toggleSidebar, closeMobile]
     )
 
     return (
@@ -207,7 +213,7 @@ const Sidebar = React.forwardRef<
             }
             side={side}
           >
-            <SheetHeader className="sr-only">
+            <SheetHeader className="p-2 text-left">
               <SheetTitle>Admin Menu</SheetTitle>
             </SheetHeader>
             <div className="flex h-full w-full flex-col">{children}</div>
@@ -555,16 +561,17 @@ const SidebarMenuButton = React.forwardRef<
       tooltip,
       className,
       href,
+      children,
       ...props
     },
     ref
   ) => {
     // If an href is provided, the component should be a Link.
     const isLink = !!href;
-    const Comp = asChild ? Slot : isLink ? "a" : "button";
+    const Comp = asChild ? Slot : "button";
 
     const { isMobile, state } = useSidebar();
-
+    
     const buttonContent = (
       <Comp
         ref={ref as any}
@@ -573,10 +580,16 @@ const SidebarMenuButton = React.forwardRef<
         data-active={isActive}
         className={cn(sidebarMenuButtonVariants({ variant, size }), className)}
         {...props}
-      />
+      >
+        {children}
+      </Comp>
     );
-    
-    const wrappedButton = isLink ? <Link href={href} legacyBehavior passHref>{buttonContent}</Link> : buttonContent;
+
+    const wrappedButton = isLink ? (
+      <Link href={href!} passHref className={cn(sidebarMenuButtonVariants({ variant, size }), className)}  data-sidebar="menu-button" data-size={size} data-active={isActive} {...props}>
+        {children}
+      </Link>
+    ) : buttonContent;
 
     if (!tooltip) {
       return wrappedButton;
