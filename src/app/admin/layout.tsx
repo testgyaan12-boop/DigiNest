@@ -2,7 +2,7 @@
 
 'use client';
 
-import { SidebarProvider, Sidebar, SidebarHeader, SidebarContent, SidebarMenu, SidebarMenuItem, SidebarMenuButton } from "@/components/ui/sidebar";
+import { SidebarProvider, Sidebar, SidebarHeader, SidebarContent, SidebarMenu, SidebarMenuItem, SidebarMenuButton, useSidebar } from "@/components/ui/sidebar";
 import { Users, Briefcase, Info, LogOut, Newspaper, ListChecks, MoreHorizontal, LayoutDashboard } from "lucide-react";
 import Link from 'next/link';
 import { usePathname, useRouter } from "next/navigation";
