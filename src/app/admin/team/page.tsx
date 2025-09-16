@@ -3,7 +3,7 @@
 
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
+import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
@@ -12,6 +12,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { MoreHorizontal, PlusCircle } from "lucide-react";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 const initialTeamMembers = [
   {
@@ -107,17 +108,19 @@ export default function ManageTeamPage() {
     return (
         <div className="p-4 md:p-8">
             <Card>
-                <CardHeader className="flex flex-row items-center justify-between">
+                <CardHeader className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
                     <div>
                         <CardTitle>Manage Team</CardTitle>
                         <CardDescription>Add, edit, or remove team members.</CardDescription>
                     </div>
-                    <Button onClick={openDialogForNew}><PlusCircle className="mr-2 h-4 w-4" />Add New Member</Button>
+                    <Button onClick={openDialogForNew} className="w-full md:w-auto"><PlusCircle className="mr-2 h-4 w-4" />Add New Member</Button>
                 </CardHeader>
                 <CardContent>
-                    <Table>
+                    {/* Desktop Table View */}
+                    <Table className="hidden md:table">
                         <TableHeader>
                             <TableRow>
+                                <TableHead className="w-[100px]">Avatar</TableHead>
                                 <TableHead>Name</TableHead>
                                 <TableHead>Role</TableHead>
                                 <TableHead className="text-right">Actions</TableHead>
@@ -126,44 +129,42 @@ export default function ManageTeamPage() {
                         <TableBody>
                             {members.map((member) => (
                                 <TableRow key={member.id}>
+                                     <TableCell>
+                                        <Avatar>
+                                            <AvatarImage src={member.avatar} alt={member.name} />
+                                            <AvatarFallback>{member.name.split(' ').map(n => n[0]).join('')}</AvatarFallback>
+                                        </Avatar>
+                                    </TableCell>
                                     <TableCell className="font-medium">{member.name}</TableCell>
                                     <TableCell>{member.role}</TableCell>
                                     <TableCell className="text-right">
-                                        <DropdownMenu>
-                                            <DropdownMenuTrigger asChild>
-                                                <Button variant="ghost" className="h-8 w-8 p-0">
-                                                    <span className="sr-only">Open menu</span>
-                                                    <MoreHorizontal className="h-4 w-4" />
-                                                </Button>
-                                            </DropdownMenuTrigger>
-                                            <DropdownMenuContent align="end">
-                                                <DropdownMenuItem onClick={() => openDialogForEdit(member)}>
-                                                    Edit
-                                                </DropdownMenuItem>
-                                                <AlertDialog>
-                                                    <AlertDialogTrigger asChild>
-                                                        <DropdownMenuItem onSelect={(e) => e.preventDefault()}>Delete</DropdownMenuItem>
-                                                    </AlertDialogTrigger>
-                                                    <AlertDialogContent>
-                                                        <AlertDialogHeader>
-                                                            <AlertDialogTitle>Are you sure?</AlertDialogTitle>
-                                                            <AlertDialogDescription>
-                                                                This action cannot be undone. This will permanently delete the team member.
-                                                            </AlertDialogDescription>
-                                                        </AlertDialogHeader>
-                                                        <AlertDialogFooter>
-                                                            <AlertDialogCancel>Cancel</AlertDialogCancel>
-                                                            <AlertDialogAction onClick={() => handleDelete(member.id)}>Continue</AlertDialogAction>
-                                                        </AlertDialogFooter>
-                                                    </AlertDialogContent>
-                                                </AlertDialog>
-                                            </DropdownMenuContent>
-                                        </DropdownMenu>
+                                        <ActionsDropdown member={member} onEdit={openDialogForEdit} onDelete={handleDelete} />
                                     </TableCell>
                                 </TableRow>
                             ))}
                         </TableBody>
                     </Table>
+                    
+                    {/* Mobile Card View */}
+                    <div className="grid gap-4 md:hidden">
+                        {members.map((member) => (
+                            <Card key={member.id}>
+                                <CardHeader className="flex flex-row items-center justify-between p-4">
+                                     <div className="flex items-center gap-4">
+                                        <Avatar>
+                                            <AvatarImage src={member.avatar} alt={member.name} />
+                                            <AvatarFallback>{member.name.split(' ').map(n => n[0]).join('')}</AvatarFallback>
+                                        </Avatar>
+                                        <div>
+                                            <CardTitle className="text-base">{member.name}</CardTitle>
+                                            <CardDescription>{member.role}</CardDescription>
+                                        </div>
+                                    </div>
+                                    <ActionsDropdown member={member} onEdit={openDialogForEdit} onDelete={handleDelete} />
+                                </CardHeader>
+                            </Card>
+                        ))}
+                    </div>
                 </CardContent>
             </Card>
 
@@ -175,6 +176,41 @@ export default function ManageTeamPage() {
             />
         </div>
     )
+}
+
+function ActionsDropdown({ member, onEdit, onDelete }: { member: TeamMember, onEdit: (member: TeamMember) => void, onDelete: (id: number) => void }) {
+    return (
+        <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+                <Button variant="ghost" className="h-8 w-8 p-0">
+                    <span className="sr-only">Open menu</span>
+                    <MoreHorizontal className="h-4 w-4" />
+                </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+                <DropdownMenuItem onClick={() => onEdit(member)}>
+                    Edit
+                </DropdownMenuItem>
+                <AlertDialog>
+                    <AlertDialogTrigger asChild>
+                        <DropdownMenuItem onSelect={(e) => e.preventDefault()}>Delete</DropdownMenuItem>
+                    </AlertDialogTrigger>
+                    <AlertDialogContent>
+                        <AlertDialogHeader>
+                            <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+                            <AlertDialogDescription>
+                                This action cannot be undone. This will permanently delete the team member.
+                            </AlertDialogDescription>
+                        </AlertDialogHeader>
+                        <AlertDialogFooter>
+                            <AlertDialogCancel>Cancel</AlertDialogCancel>
+                            <AlertDialogAction onClick={() => onDelete(member.id)}>Continue</AlertDialogAction>
+                        </AlertDialogFooter>
+                    </AlertDialogContent>
+                </AlertDialog>
+            </DropdownMenuContent>
+        </DropdownMenu>
+    );
 }
 
 function MemberFormDialog({ isOpen, onOpenChange, onSave, member }: {
@@ -254,3 +290,4 @@ function MemberFormDialog({ isOpen, onOpenChange, onSave, member }: {
     );
 }
 
+    
