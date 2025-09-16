@@ -107,7 +107,8 @@ const ShareButton = ({ postTitle }: { postTitle: string }) => {
     );
 };
 
-export default function BlogPostPage({ params: { slug } }: { params: { slug: string } }) {
+export default function BlogPostPage({ params }: { params: { slug: string } }) {
+  const { slug } = params;
   const [post, setPost] = useState<BlogPost | null>(null);
   const [comments, setComments] = useState<Comment[]>([]);
   const [newComment, setNewComment] = useState('');
