@@ -3,7 +3,7 @@
 'use client';
 
 import { SidebarProvider, Sidebar, SidebarHeader, SidebarContent, SidebarMenu, SidebarMenuItem, SidebarMenuButton, useSidebar } from "@/components/ui/sidebar";
-import { Users, Briefcase, Info, LogOut, Newspaper, ListChecks, MoreHorizontal, LayoutDashboard } from "lucide-react";
+import { Users, Briefcase, Info, LogOut, Newspaper, ListChecks, MoreHorizontal, LayoutDashboard, Database } from "lucide-react";
 import Link from 'next/link';
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -22,6 +22,7 @@ const adminNavLinks = [
 const moreAdminLinks = [
   { href: "/admin/projects", label: "Projects", icon: ListChecks },
   { href: "/admin/about", label: "About", icon: Info },
+  { href: "/admin/database-schema", label: "DB Schema", icon: Database },
 ];
 
 const AdminNavLink = ({ href, label, icon: Icon, onClick }: { href: string; label: string; icon: React.ElementType, onClick?: () => void }) => {
@@ -100,6 +101,12 @@ function AdminLayoutContent({ children }: { children: React.ReactNode }) {
               <SidebarMenuButton href="/admin/projects" isActive={pathname.startsWith('/admin/projects')} tooltip={{ children: 'Manage Projects' }}>
                 <ListChecks />
                 <span>Manage Projects</span>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+            <SidebarMenuItem>
+              <SidebarMenuButton href="/admin/database-schema" isActive={pathname.startsWith('/admin/database-schema')} tooltip={{ children: 'Database Schema' }}>
+                <Database />
+                <span>DB Schema</span>
               </SidebarMenuButton>
             </SidebarMenuItem>
           </SidebarMenu>
