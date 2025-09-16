@@ -9,7 +9,7 @@ export default function AdminPage() {
   const router = useRouter();
 
   useEffect(() => {
-    router.replace('/admin/team');
+    router.replace('/admin/dashboard');
   }, [router]);
 
   return (

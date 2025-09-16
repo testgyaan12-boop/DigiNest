@@ -1,22 +1,26 @@
 
+
 'use client';
 
 import { SidebarProvider, Sidebar, SidebarHeader, SidebarContent, SidebarMenu, SidebarMenuItem, SidebarMenuButton } from "@/components/ui/sidebar";
-import { Users, Briefcase, Info, LogOut, Newspaper, ListChecks, MoreHorizontal } from "lucide-react";
+import { Users, Briefcase, Info, LogOut, Newspaper, ListChecks, MoreHorizontal, LayoutDashboard } from "lucide-react";
 import Link from 'next/link';
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
+import { Button } from "@/components/ui/button";
+import { PanelLeft } from "lucide-react";
 
 const adminNavLinks = [
+  { href: "/admin/dashboard", label: "Dashboard", icon: LayoutDashboard },
   { href: "/admin/team", label: "Team", icon: Users },
   { href: "/admin/services", label: "Services", icon: Briefcase },
   { href: "/admin/blog", label: "Blog", icon: Newspaper },
-  { href: "/admin/projects", label: "Projects", icon: ListChecks },
 ];
 
 const moreAdminLinks = [
+  { href: "/admin/projects", label: "Projects", icon: ListChecks },
   { href: "/admin/about", label: "About", icon: Info },
 ];
 
@@ -48,6 +52,7 @@ export default function AdminLayout({
 }) {
   const pathname = usePathname();
   const router = useRouter();
+  const { toggleSidebar } = useSidebar();
   const [isAdmin, setIsAdmin] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [isSheetOpen, setIsSheetOpen] = useState(false);
@@ -93,6 +98,12 @@ export default function AdminLayout({
           </SidebarHeader>
           <SidebarContent>
             <SidebarMenu>
+               <SidebarMenuItem>
+                <SidebarMenuButton href="/admin/dashboard" isActive={pathname.startsWith('/admin/dashboard')} tooltip={{ children: 'Dashboard' }}>
+                  <LayoutDashboard />
+                  <span>Dashboard</span>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
               <SidebarMenuItem>
                 <SidebarMenuButton href="/admin/team" isActive={pathname.startsWith('/admin/team')} tooltip={{ children: 'Manage Team' }}>
                   <Users />
@@ -136,7 +147,14 @@ export default function AdminLayout({
         </Sidebar>
 
         <main className="flex-1 flex flex-col pb-16 md:pb-0">
-           <header className="flex h-14 items-center justify-between border-b bg-muted/40 px-6 md:hidden">
+           <header className="flex h-14 items-center justify-between border-b bg-muted/40 px-4 md:hidden">
+              <button
+                className="p-2 -ml-2 text-foreground"
+                onClick={toggleSidebar}
+              >
+                  <PanelLeft className="h-6 w-6"/>
+                  <span className="sr-only">Toggle Menu</span>
+              </button>
               <h1 className="font-semibold text-lg">Admin Panel</h1>
           </header>
           <div className="flex-1 overflow-auto">
