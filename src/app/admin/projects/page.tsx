@@ -164,4 +164,3 @@ function StatusActionsDropdown({ project, onStatusChange }: {
         </DropdownMenu>
     );
 }
-
