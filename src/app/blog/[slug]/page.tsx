@@ -6,7 +6,6 @@ import { notFound } from 'next/navigation';
 import Image from 'next/image';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
-import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';
 import { Card, CardContent } from '@/components/ui/card';
 import { Share2, Copy } from 'lucide-react';
@@ -108,7 +107,7 @@ const ShareButton = ({ postTitle }: { postTitle: string }) => {
     );
 };
 
-export default function BlogPostPage({ params }: { params: { slug: string } }) {
+export default function BlogPostPage({ params: { slug } }: { params: { slug: string } }) {
   const [post, setPost] = useState<BlogPost | null>(null);
   const [comments, setComments] = useState<Comment[]>([]);
   const [newComment, setNewComment] = useState('');
@@ -118,7 +117,7 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
     setIsClient(true);
     const storedPosts = localStorage.getItem("blogPosts");
     const allPosts = storedPosts ? JSON.parse(storedPosts) : initialBlogPosts;
-    const foundPost = allPosts.find((p: BlogPost) => generateSlug(p.title) === params.slug);
+    const foundPost = allPosts.find((p: BlogPost) => generateSlug(p.title) === slug);
     
     if (foundPost) {
         setPost(foundPost);
@@ -131,7 +130,7 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
         // Only call notFound on the client-side after checking
         notFound();
     }
-  }, [params.slug]);
+  }, [slug]);
 
   const handleCommentSubmit = (e: React.FormEvent) => {
       e.preventDefault();
@@ -197,7 +196,7 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
           <Card className="mb-8">
             <CardContent className="p-6">
                 <form onSubmit={handleCommentSubmit} className="space-y-4">
-                    <Label htmlFor="comment" className="font-semibold">Leave a comment</Label>
+                    <label htmlFor="comment" className="font-semibold">Leave a comment</label>
                     <Textarea
                         id="comment"
                         placeholder="What are your thoughts?"
