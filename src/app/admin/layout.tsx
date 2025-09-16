@@ -5,7 +5,6 @@ import { SidebarProvider, Sidebar, SidebarHeader, SidebarTrigger, SidebarContent
 import { Users, Briefcase, Info, LogOut, Newspaper, ListChecks } from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 
 export default function AdminLayout({
   children,
@@ -15,36 +14,36 @@ export default function AdminLayout({
   const pathname = usePathname();
   const router = useRouter();
   const [isAdmin, setIsAdmin] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // Check for admin status in localStorage
     const storedAdminStatus = localStorage.getItem('isAdmin');
     if (storedAdminStatus === 'true') {
         setIsAdmin(true);
     } else {
-        // If not an admin, redirect to home page.
-        // The authentication is now handled in the Header component.
         router.push('/');
     }
+    setIsLoading(false);
   }, [router]);
 
   const handleLogout = () => {
     localStorage.removeItem('isAdmin');
-    localStorage.removeItem('user'); // Also log out from general session
+    localStorage.removeItem('user'); 
     setIsAdmin(false);
     router.push('/');
-    // We need to reload to ensure all states are cleared.
     setTimeout(() => window.location.reload(), 100);
   }
 
-  if (!isAdmin) {
-    // Render a loading state or null while we check for admin status
-    // to prevent flashing the admin content.
+  if (isLoading) {
     return (
         <div className="flex items-center justify-center h-screen">
             <p>Verifying access...</p>
         </div>
     );
+  }
+  
+  if (!isAdmin) {
+    return null;
   }
 
   return (
@@ -99,9 +98,9 @@ export default function AdminLayout({
             </SidebarMenu>
         </SidebarFooter>
       </Sidebar>
-      <div className="flex-1">
+      <main className="flex-1">
         {children}
-      </div>
+      </main>
     </SidebarProvider>
   );
 }

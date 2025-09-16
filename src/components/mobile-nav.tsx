@@ -79,17 +79,15 @@ export default function MobileNav() {
 
 
   useEffect(() => {
-    // This effect runs on both path changes and when the component mounts on the client.
-    // It's the most reliable way to check localStorage.
     if (typeof window !== 'undefined') {
-      const adminStatus = localStorage.getItem('isAdmin') === 'true';
-      setIsAdminView(adminStatus);
+      const adminPath = pathname.startsWith('/admin');
+      setIsAdminView(adminPath);
     }
-  }, [pathname]); // Re-check on path change to handle navigation events.
+  }, [pathname]);
   
   if (isAdminView) {
-    // If we are in an admin view, do not render the standard mobile navigation.
-    // The admin layout has its own mobile-responsive sidebar.
+    // The admin layout has its own responsive sidebar for mobile.
+    // So we don't render the standard mobile nav on admin pages.
     return null; 
   }
   
