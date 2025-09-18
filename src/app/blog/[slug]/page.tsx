@@ -107,7 +107,7 @@ const ShareButton = ({ postTitle }: { postTitle: string }) => {
     );
 };
 
-export default function BlogPostPage({ params }: { params: { slug: string } }) {
+export default function BlogPostPage({ params: { slug } }: { params: { slug: string } }) {
   const [post, setPost] = useState<BlogPost | null>(null);
   const [comments, setComments] = useState<Comment[]>([]);
   const [newComment, setNewComment] = useState('');
@@ -121,7 +121,7 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
     if (isClient) {
         const storedPosts = localStorage.getItem("blogPosts");
         const allPosts = storedPosts ? JSON.parse(storedPosts) : initialBlogPosts;
-        const foundPost = allPosts.find((p: BlogPost) => generateSlug(p.title) === params.slug);
+        const foundPost = allPosts.find((p: BlogPost) => generateSlug(p.title) === slug);
         
         if (foundPost) {
             setPost(foundPost);
@@ -134,7 +134,7 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
             notFound();
         }
     }
-  }, [isClient, params.slug]);
+  }, [isClient, slug]);
 
   const handleCommentSubmit = (e: React.FormEvent) => {
       e.preventDefault();
