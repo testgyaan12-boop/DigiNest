@@ -114,7 +114,7 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
   const [pageSlug, setPageSlug] = useState<string | null>(null);
 
   useEffect(() => {
-    const slug = (params as any)['slug'];
+    const slug = params.slug;
     if (slug) {
       setPageSlug(slug);
     }
