@@ -115,7 +115,7 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
 
   useEffect(() => {
     setPageSlug(params.slug);
-  }, [params.slug]);
+  }, [params]);
 
   useEffect(() => {
     if (pageSlug) {
@@ -240,5 +240,3 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
     </div>
   );
 }
-
-    
